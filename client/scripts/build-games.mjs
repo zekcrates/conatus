@@ -6,7 +6,8 @@ import JavaScriptObfuscator from "javascript-obfuscator";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "../..");
 const sourceDirectory = path.join(projectRoot, "game", "eastern-front");
-const outputDirectory = path.join(projectRoot, "client", "public", "games", "eastern-front");
+const outputDirectory = path.join(projectRoot, "client", "public", "play", "eastern-front");
+const legacyOutputDirectory = path.join(projectRoot, "client", "public", "games", "eastern-front");
 
 const obfuscationOptions = {
   compact: true,
@@ -73,8 +74,9 @@ async function buildGameBundle() {
 }
 
 await fs.access(path.join(sourceDirectory, "index.html"));
+await fs.rm(legacyOutputDirectory, { recursive: true, force: true });
 await fs.rm(outputDirectory, { recursive: true, force: true });
 await fs.mkdir(outputDirectory, { recursive: true });
 await copyGameAssets();
 await buildGameBundle();
-console.log("Prepared the Eastern Front static browser game in client/public/games/eastern-front.");
+console.log("Prepared the Eastern Front static browser game in client/public/play/eastern-front.");

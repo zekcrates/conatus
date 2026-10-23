@@ -5,6 +5,7 @@ node_modules/
 # Frontend build output
 client/dist/
 client/public/games/
+client/public/play/
 game-dist/
 
 # TypeScript and tool caches
