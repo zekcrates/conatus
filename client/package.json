@@ -1,0 +1,26 @@
+{
+  "name": "browser-game-company-client",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build:games && vite --configLoader runner",
+    "build:games": "node scripts/build-games.mjs",
+    "build": "npm run build:games && tsc -b && vite build --configLoader runner",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "javascript-obfuscator": "^5.9.0",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.7"
+  }
+}

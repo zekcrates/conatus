@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EASTERN FRONT 1941-43 - Barbarossa &amp; Stalingrad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Cormorant+SC:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=57">
+</head>
+<body class="intro-unlocked" data-side="GER">
+<canvas id="map"></canvas>
+
+<!-- ============ HOME AUDIO (intro screen) ============ -->
+<div id="home-audio" class="home-audio">
+  <button id="home-sound" class="home-audio-btn" aria-pressed="true" title="Sound and music">SOUND ON</button>
+
+</div>
+
+<!-- ============ TOP BAR ============ -->
+<div id="topbar" class="hidden">
+  <div id="tb-side"><span id="tb-crest"></span><span id="tb-faction"></span></div>
+  <div id="tb-center"><div id="tb-date">-</div><div id="tb-weather">-</div></div>
+  <div id="tb-buttons"></div>
+</div>
+
+<!-- ============ BOTTOM COMMAND STRIP ============ -->
+<div id="strip" class="hidden">
+  <div id="dock" class="hidden"></div>
+  <div id="sidebox"></div>
+</div>
+
+<!-- ============ BATTLE REPORTS (top right) ============ -->
+<div id="reports"></div>
+
+<!-- ============ CITY FALL ANNOUNCEMENT ============ -->
+<div id="city-fall" class="hidden" aria-live="assertive">
+  <div class="cf-inner">
+    <div id="city-fall-kicker" class="cf-kicker">CITY LOST</div>
+    <div id="city-fall-city" class="cf-city">CITY</div>
+    <div class="cf-line">HAS FALLEN</div>
+    <div id="city-fall-sub" class="cf-sub"></div>
+  </div>
+</div>
+
+<!-- ============ PROLOGUE ============ -->
+<div id="prologue" class="hidden" aria-label="Prologue">
+  <audio id="prologue-music" loop preload="auto"><source src="assets/audio/prologue-music.mp3?v=6" type="audio/mpeg"></audio>
+  <div id="prologue-story" class="prologue-story" aria-live="polite"></div>
+  <button id="prologue-sound-hint" class="prologue-sound-hint">CLICK ANYWHERE FOR SOUND</button>
+  <button id="btn-prologue-sound" class="prologue-sound" aria-pressed="true">SOUND ON</button>
+  <button id="btn-prologue-skip" class="prologue-skip">SKIP [SPACE]</button>
+</div>
+
+<!-- ============ INTRO ============ -->
+<div id="intro">
+  <div class="intro-inner">
+    <div class="intro-kicker">JUNE 22, 1941 - AUGUST 23, 1943</div>
+    <h1 class="intro-title">EASTERN FRONT</h1>
+    <div class="intro-sub">OPERATION BARBAROSSA AND THE BATTLE OF STALINGRAD</div>
+    <p class="intro-lede">At 03:15 on June 22, 1941, 3.8 million Axis soldiers and 3,600 tanks crossed the Soviet frontier
+      on a 2,900 km front - the largest invasion in history. By December they stood before Moscow.
+      A year later, an entire German army vanished in the ruins of Stalingrad.<br></p>
+    <div id="continue-row" class="intro-continue hidden">
+      <button id="btn-continue" class="btn-continue">
+        <span>CONTINUE CAMPAIGN</span>
+        <small id="continue-meta"></small>
+      </button>
+    </div>
+    <div class="faction-cards">
+      <button class="faction-card ger" data-side="GER">
+        <span class="fc-head"><span class="fc-crest" data-crest="GER"></span><img class="wflag" src="assets/flag-ger.svg?v=46" alt="German national flag 1935-1945" style="width:44px;height:27px"></span>
+        <span class="fc-name">WEHRMACHT</span>
+        <span class="fc-role">Army Groups North, Centre, South</span>
+        <span class="fc-goal">Drive deep and smash everything the Red Army throws at you. Push to the Volga and the gates of Moscow before the tide turns. Beware: distance, mud and snow are your true enemies.</span>
+      </button>
+      <button class="faction-card sov" data-side="SOV">
+        <span class="fc-head"><span class="fc-crest" data-crest="SOV"></span><img class="wflag" src="assets/flag-sov.svg?v=47" alt="Soviet Union national flag" style="width:44px;height:27px"></span>
+        <span class="fc-name">RED ARMY</span>
+        <span class="fc-role">Stavka of the Supreme Command</span>
+        <span class="fc-goal">Trade space for time. Survive the first blow, bleed him at Stalingrad, then break him at <b>Kursk</b>. Hold out until the summer of 1943, and the tide turns for good.</span>
+      </button>
+    </div>
+    <div class="intro-actions">
+      <button id="btn-learn-intro" class="btn-ghost">HISTORICAL BRIEFING</button>
+    </div>
+    <div class="intro-start">
+      <button id="btn-start" class="btn-big" disabled>CHOOSE YOUR COMMAND</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HISTORICAL BRIEFING (BOOK) ============ -->
+<div id="learn" class="hidden">
+  <div class="book">
+    <div class="book-spread" id="learn-spread">
+      <section class="page page-left" id="learn-page-l"></section>
+      <section class="page page-right" id="learn-page-r"></section>
+    </div>
+    <div class="book-bar">
+      <button id="learn-prev" class="book-nav" aria-label="Previous page">&lsaquo;</button>
+      <div class="book-meta">
+        <div class="book-title" id="learn-title">HISTORICAL BRIEFING</div>
+        <div class="book-no" id="learn-no">SPREAD 1 OF 5</div>
+      </div>
+      <button id="learn-next" class="book-nav" aria-label="Next page">&rsaquo;</button>
+    </div>
+    <button id="learn-close" class="modal-x">CLOSE</button>
+  </div>
+</div>
+
+<!-- ============ CONFIRM DIALOG ============ -->
+<div id="dialog" class="hidden">
+  <div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="dialog-title" aria-describedby="dialog-text">
+    <div class="dialog-kicker">CONFIRM ORDER</div>
+    <h2 id="dialog-title">ARE YOU SURE?</h2>
+    <p id="dialog-text"></p>
+    <div class="dialog-actions">
+      <button id="dialog-cancel" class="dialog-btn">CANCEL</button>
+      <button id="dialog-ok" class="dialog-btn primary">CONFIRM</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAUSE MENU ============ -->
+<div id="pause" class="hidden">
+  <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+    <div class="pause-kicker">CAMPAIGN PAUSED</div>
+    <h2 id="pause-title">THE WAR WAITS</h2>
+    <div id="pause-meta" class="pause-meta"></div>
+    <div class="pause-grid">
+      <button id="pause-resume" class="pause-btn primary">RESUME</button>
+      <button id="pause-save" class="pause-btn">SAVE GAME</button>
+      <button id="pause-sound" class="pause-btn">SOUND: ON</button>
+      <button id="pause-new" class="pause-btn danger">NEW GAME</button>
+      <button id="pause-menu" class="pause-btn">QUIT TO MENU</button>
+    </div>
+    <div id="pause-status" class="pause-status">Progress autosaves while you play.</div>
+    <div class="pause-hint">ESC or Q resumes</div>
+  </div>
+</div>
+
+<!-- ============ EPILOGUE ============ -->
+<div id="epilogue" class="hidden" aria-label="Historical epilogue">
+  <audio id="epilogue-music" preload="auto"><source src="assets/audio/epilogue-music.mp3?v=4" type="audio/mpeg"></audio>
+  <div id="epilogue-stage" class="epi-stage"></div>
+  <button id="epilogue-sound-hint" class="epi-sound-hint hidden">CLICK FOR SOUND</button>
+  <div class="epi-hud">
+    <button id="epilogue-skip" class="epi-skip">SKIP [ESC]</button>
+  </div>
+</div>
+
+<!-- ============ END SCREEN ============ -->
+<div id="end" class="hidden">
+  <div class="end-card">
+    <div class="end-kicker" id="end-kicker"></div>
+    <h1 id="end-title"></h1>
+    <p id="end-text"></p>
+    <button id="btn-again" class="btn-big">PLAY AGAIN</button>
+  </div>
+</div>
+
+<script src="js/data.js?v=48"></script>
+<script src="js/engine.js?v=45"></script>
+<script src="js/ai.js?v=45"></script>
+<script src="js/render.js?v=49"></script>
+<script src="js/main.js?v=63"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+

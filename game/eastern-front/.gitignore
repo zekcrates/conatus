@@ -1,0 +1,12 @@
+# OS cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# build / upload artifacts
+*.zip
+__pycache__/
+*.pyc
+
+# scratch
+scratch/

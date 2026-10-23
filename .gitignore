@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Frontend build output
+client/dist/
+client/public/games/
+game-dist/
+
+# TypeScript and tool caches
+*.tsbuildinfo
+.vite/
+.cache/
+.turbo/
+coverage/
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Logs and debug output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor settings and temporary files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+*.swp
+*.swo
+*.tmp
+
+# Python scratch files used by game tooling
+__pycache__/
+*.py[cod]
+
+# Archives and local scratch work
+*.zip
+scratch/
+Eastern Front Battlefield Poster.png
+idea.txt

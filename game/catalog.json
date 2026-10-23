@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "games": [
+    {
+      "id": "eastern-front",
+      "title": "Eastern Front",
+      "version": "0.1.2",
+      "status": "coming-soon",
+      "priceCents": 500,
+      "currency": "USD",
+      "sourceDirectory": "eastern-front",
+      "access": "purchase"
+    },
+    {
+      "id": "estonia-1992",
+      "title": "Estonia 1992",
+      "version": "0.1.0",
+      "status": "in-development",
+      "priceCents": null,
+      "currency": "USD",
+      "sourceDirectory": null,
+      "access": "purchase"
+    }
+  ]
+}
