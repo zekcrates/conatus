@@ -17,7 +17,8 @@ a { color: inherit; text-decoration: none; }
 
 .site-shell { max-width: 1240px; margin: 0 auto; padding: 0 36px; }
 .site-header { height: 84px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #c9c6bb; }
-.brand { display: flex; align-items: baseline; gap: 9px; font-size: 19px; font-weight: 700; letter-spacing: -.06em; }
+.brand { display: flex; align-items: center; gap: 9px; font-size: 19px; font-weight: 700; letter-spacing: -.06em; }
+.brand-mark { width: 22px; height: 22px; flex: 0 0 auto; object-fit: contain; }
 .brand small { color: #7d7a71; font-family: Consolas, monospace; font-size: 9px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; }
 .header-actions { display: flex; align-items: center; gap: 22px; }
 .header-store { color: #77746b; font-family: Consolas, monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
@@ -82,10 +83,16 @@ a { color: inherit; text-decoration: none; }
 .purchase-section { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 9%; }
 .purchase-section h2 { max-width: 420px; }
 .purchase-note { max-width: 350px; margin: 22px 0 0; color: #6d6a61; font-size: 14px; line-height: 1.55; }
-.purchase-card { display: flex; align-items: center; min-height: 116px; padding: 18px; background: #1d1d1a; color: #f1eee5; }
+.purchase-actions { min-width: 0; }
+.purchase-card { display: flex; align-items: center; }
 .purchase-launch { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 19px; background: #a85b2c; color: #f1eee5; font-size: 14px; font-weight: 600; }
 .purchase-launch span { font-size: 20px; font-weight: 400; line-height: 1; }
 .purchase-launch:hover { background: #d07a43; }
+.coffee-link { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 10px; margin-top: 12px; padding: 11px 12px; border: 1px solid #c9c6bb; color: #6d6a61; font-size: 12px; font-weight: 600; }
+.coffee-link:hover { border-color: #a85b2c; background: #f5eee7; color: #1d1d1a; }
+.coffee-icon { color: #d07a43; font-size: 17px; line-height: 1; }
+.coffee-arrow { color: #aaa69c; font-size: 16px; font-weight: 400; line-height: 1; }
+.coffee-link:hover .coffee-arrow { color: #a85b2c; }
 .purchase-result { display: flex; flex-direction: column; gap: 12px; }
 .purchase-result strong { color: #d9b27a; font-family: Consolas, monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
 .purchase-result a { padding: 13px 19px; background: #a85b2c; color: #f1eee5; font-size: 12px; font-weight: 600; text-align: center; }
@@ -399,7 +406,7 @@ a { color: inherit; text-decoration: none; }
   .units-list div { min-height: 86px; padding: 12px; }
   .units-list span { font-size: 12px; }
   .units-list small { font-size: 8px; }
-  .purchase-card { min-height: 88px; margin-top: 26px; padding: 12px; }
+  .purchase-card { min-height: 0; margin-top: 26px; padding: 0; }
   .purchase-launch { min-height: 54px; padding: 16px; }
 
   .game-entry-info { flex-direction: column; gap: 8px; }

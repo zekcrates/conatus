@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
 
+export const coffeeUrl = "https://buymeacoffee.com/conatus";
+
 export function Header(_props: { showAuth?: boolean } = {}) {
   return (
     <header className="site-header">
-      <a href="/#top" className="brand" aria-label="Conatus home"><span>Conatus</span><small>Games</small></a>
+      <a href="/#top" className="brand" aria-label="Conatus home"><img className="brand-mark" src="/logo.png" alt="" aria-hidden="true" /><span>Conatus</span><small>Games</small></a>
       <div className="header-actions"><a href="/store" className="header-store">Store</a></div>
     </header>
   );
@@ -15,7 +17,7 @@ export function Footer() {
       <div className="footer-main">
         <div className="footer-brand"><a href="/#top" className="footer-logo">Conatus</a><p>Independent browser games<br />about history and economics.</p></div>
         <div className="footer-column"><p className="footer-heading">Explore</p><a href="/store">Store</a><a href="/games">Games</a><a href="/about">About us</a></div>
-        <div className="footer-column"><p className="footer-heading">Contact</p><a href="/contact">Email us</a></div>
+        <div className="footer-column"><p className="footer-heading">Contact</p><a href="/contact">Email us</a><a href={coffeeUrl} target="_blank" rel="noreferrer">Buy us a coffee</a></div>
         <div className="footer-column"><p className="footer-heading">Information</p><a href="/privacy">Privacy policy</a><a href="/terms">Terms of use</a></div>
       </div>
       <div className="footer-bottom"><span>© 2026 Conatus Games</span></div>
