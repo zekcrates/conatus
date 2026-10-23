@@ -23,8 +23,10 @@ function aiThreshold(g, side){
   const d = g.day;
   // 1941-42: the Red Army trades space for blood - it does not counterattack yet
   if(d < D('1942-06-01')) return 2.4;
-  if(d < D('1943-02-02')) return 1.7;
-  return 1.1;                                    // after Stalingrad: the tide has turned
+  if(d < D('1942-11-19')) return 1.7;
+  // overpowered counteroffensive: once the tide turns, the Red Army attacks
+  if(OBJECTIVES.some(id => g.cities[id] && g.cities[id].owner === 'GER')) return 0.85;
+  return 0.95;                                   // after Stalingrad: the tide has turned
 }
 
 function aiThink(g, side){
@@ -53,7 +55,8 @@ function aiThink(g, side){
     }
     let i = 0;
     const sovPassive = side === 'SOV' && g.day < D('1941-12-05');   // trading space for time
-    const cap = sovPassive ? 1 : 4;
+    const lostPillar = side === 'SOV' && OBJECTIVES.some(id => g.cities[id] && g.cities[id].owner === 'GER');
+    const cap = sovPassive ? 1 : (lostPillar || g.day >= D('1942-11-19')) ? 7 : 4;
     while(deploys < cap && (g.reserve[side].inf > 0 || g.reserve[side][elite] > 0)){
       const key = (sovPassive || g.reserve[side][elite] <= 0) ? 'inf' : elite;
       const target = threatened.length ? threatened[i % threatened.length] : stage;
@@ -120,7 +123,8 @@ function aiThink(g, side){
   /* ---------- 2. attacks (limited offensives, from rested armies) ---------- */
   let attacks = 0;
   const citadel = side === 'GER' && g.day >= D('1943-07-05') && g.day <= D('1943-07-20');
-  const maxOff = citadel ? 3 : side === 'GER' ? 2 : (side === 'SOV' && g.day < D('1941-12-05')) ? 0 : 1;
+  const sovCounter = side === 'SOV' && (OBJECTIVES.some(id => g.cities[id] && g.cities[id].owner === 'GER') || g.day >= D('1942-11-19'));
+  const maxOff = citadel ? 3 : side === 'GER' ? 2 : (side === 'SOV' && g.day < D('1941-12-05')) ? 0 : (sovCounter ? 3 : 1);
   for(const f of frontCities){
     if(attacks >= maxOff) break;
     if(g.cp(f.g) < 600) continue;

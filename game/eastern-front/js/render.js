@@ -351,6 +351,7 @@ class Renderer {
     }));
     this.time = 0;
     this.sel = null; this.target = null;   // ui selection (ids)
+    this.tutCities = [];                   // field manual: cities to ring
     this.flagImgs = { GER:new Image(), SOV:new Image() };
     this.flagImgs.GER.src = 'assets/flag-ger.svg?v=46';
     this.flagImgs.SOV.src = 'assets/flag-sov.svg?v=47';
@@ -660,6 +661,25 @@ class Renderer {
 
     // selection
     this.selection(g);
+
+    // field manual cue rings
+    if(this.tutCities && this.tutCities.length){
+      const pulse = (Math.sin(this.time * 3.2) + 1) / 2;
+      for(const id of this.tutCities){
+        if(!g.cities[id]) continue;
+        const s = this.cityScreen(id);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 22 + pulse * 13, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(233,196,106,${0.85 - pulse * 0.4})`;
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 17, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(20,15,8,0.45)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
 
     // particles (map-anchored, stored in screen coords)
     this.particles(dt);

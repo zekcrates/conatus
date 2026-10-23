@@ -86,12 +86,19 @@ class Game {
   /* ---------- production ---------- */
   sideMult(side){
     const d = this.day;
-    if(side === 'GER') return d < D('1942-06-01') ? 1.0 : (d < D('1943-07-12') ? 1.05 : 0.85);   // occupied Europe works for the Reich - until it burns
-    if(d < D('1941-12-01')) return 0.6;         // chaos & evacuation east
-    if(d < D('1942-06-01')) return 0.8;
-    if(d < D('1942-11-01')) return 1.15;
+    if(side === 'GER'){
+      // the Reich's industry burns as the front stretches east
+      if(d < D('1942-06-01')) return 1.0;
+      if(d < D('1943-01-01')) return 0.95;
+      if(d < D('1943-07-12')) return 0.85;
+      return 0.7;                                // after Prokhorovka: the machine breaks
+    }
+    // factories evacuated beyond the Urals come back online and out-produce the Reich
+    if(d < D('1941-12-01')) return 0.5;         // chaos & evacuation east
+    if(d < D('1942-06-01')) return 0.75;
+    if(d < D('1942-11-01')) return 1.1;
     if(d < D('1943-02-02')) return 1.5;         // full war economy
-    return 1.7;                                 // the Soviet tide, at full flood
+    return 1.85;                                // the Soviet tide, at full flood
   }
   indEff(city){
     let m = 1;
@@ -101,7 +108,10 @@ class Game {
   income(side){
     let s = 0;
     for(const id in this.cities) if(this.cities[id].owner===side) s += this.indEff(this.cities[id]);
-    if(side === 'SOV') s += 8;   // factories evacuated beyond the Urals - never fully lost
+    if(side === 'SOV'){
+      const d = this.day;
+      s += d < D('1942-06-01') ? 6 : (d < D('1943-02-02') ? 10 : 14);
+    }   // factories evacuated beyond the Urals - never fully lost
     return s * this.sideMult(side);
   }
   unitUnlocked(side, key){
@@ -128,7 +138,12 @@ class Game {
   trainThroughput(side){
     let ind = 0;
     for(const id in this.cities) if(this.cities[id].owner===side) ind += this.indEff(this.cities[id]);
-    if(side === 'SOV') ind += 8;            // factories beyond the Urals never stop
+    // factories evacuated beyond the Urals come online as the war goes on
+    if(side === 'SOV'){
+      const d = this.day;
+      const ural = d < D('1942-06-01') ? 6 : (d < D('1943-02-02') ? 10 : 14);
+      ind += ural;
+    }
     let m = this.sideMult(side);
     if(side === 'GER' && this.day < D('1942-06-01')) m *= 1.3;  // the Reich's industry at full stride
     return ind * m * 13;                    // points/day of training capacity
@@ -217,13 +232,17 @@ class Game {
     if(side === 'SOV'){
       if(this.day >= D('1942-11-19')) m *= 1.35;
       if(this.day >= D('1942-12-20')) m *= 1.15;
+      // overpowered counteroffensive: once a pillar falls, the Red Army
+      // tears the front open and the retreat begins
+      const lostPillar = OBJECTIVES.some(id => this.cities[id] && this.cities[id].owner === 'GER');
+      if(lostPillar){ m *= 1.6; }
+      if(this.day >= D('1943-02-02')) m *= 1.25;
     }
     if(side === 'GER'){
       if(this.day < D('1941-11-01')) m *= 1.3;    // 1941: no army fought like the Wehrmacht
       if(this.day >= D('1943-01-01')) m *= 0.85;  // 1943: the rot sets in
       if(this.day >= D('1943-07-12')) m *= 0.7;   // after Prokhorovka: never attack again
     }
-    if(side === 'SOV' && this.day >= D('1943-02-02')) m *= 1.2;  // the initiative is theirs
     return m;
   }
   defMult(city){
@@ -332,16 +351,17 @@ class Game {
       // the walls crack - but the city falls only when its hidden HP is spent
       const siegeMult = this.stackProfile(b.g, atkSide, 'siege');   // Katyushas & Tigers hammer hardest
       c.hp -= Math.min(c.hp, Math.round(Math.min(85, (18 + 46*(atk-def)/Math.max(def,1)) * siegeMult)));
-      // history's floor: the three Soviet pillars never fall. Berlin holds until
-      // the Uranus era - after that, only a truly overwhelming assault takes it.
-      if(OBJECTIVES.includes(b.cityId) && defSide === 'SOV'){
-        c.hp = this.cityMaxHp(c);              // the pillars never break - not a crack
+      // history's floor: the three Soviet pillars NEVER fall - not to a million men,
+      // not to a hundred battles. Berlin holds until the Uranus era.
+      if(OBJECTIVES.includes(b.cityId)){
+        c.hp = this.cityMaxHp(c);              // the pillars do not crack - ever
         unbreakable = true;
+        captured = false;                      // no assault takes them
       } else if(c.def.flags.cap){
         c.hp = this.cityMaxHp(c);              // Berlin's walls hold completely until Uranus
         unbreakable = true;
       }
-      captured = c.hp <= 0;
+      if(!unbreakable) captured = c.hp <= 0;
       const lossFrac = clamp(0.38 * def/Math.max(atk,1), 0.12, 0.5);
       atkLost = this.scaleG(b.g, 1 - lossFrac);
 
@@ -430,11 +450,13 @@ class Game {
     if(this.phase !== 'play') return;
     const owns = (side, id) => this.cities[id].owner === side;
     let reason = null, winner = null;
-    if(OBJECTIVES.every(id => owns('GER', id))){ winner='GER'; reason='total'; }
-    else if(owns('SOV','berlin')){ winner='SOV'; reason='berlin'; }
-    else if(this.day >= END_DAY){ winner='SOV'; reason='time'; }
-    else if(Object.values(this.cities).every(c => c.owner!=='SOV')){ winner='GER'; reason='annihilate'; }
+    // the Soviet Union does not lose this war: history is not rewritten.
+    // Germany may take cities and win battles, but the war ends only with
+    // Soviet victory - by Berlin, by the annihilation of the Wehrmacht,
+    // or by the clock (23 Aug 1943).
+    if(owns('SOV','berlin')){ winner='SOV'; reason='berlin'; }
     else if(Object.values(this.cities).every(c => c.owner!=='GER')){ winner='SOV'; reason='annihilate'; }
+    else if(this.day >= END_DAY){ winner='SOV'; reason='time'; }
     if(winner){
       this.phase = 'end';
       this.endInfo = { winner, reason };

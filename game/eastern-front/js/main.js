@@ -137,7 +137,7 @@ let game = null, renderer = null;
 const ui = {
   sel:null, target:null, frac:0.75, useAir:false,
   deploy:null,          // dock selection: 'inf' | 'tank' | 'heavy' | 'air'
-  chosen:null, started:false, paused:false, dialogOpen:false, ending:false, endShown:false,
+  chosen:null, started:false, paused:false, dialogOpen:false, tutOpen:false, ending:false, endShown:false,
   lastPanel:0, lastTop:0, lastSave:0, gunT:0
 };
 const DAY_MS = DAY_SEC * 1000;   // the war never stops - no pause, one tempo
@@ -299,8 +299,112 @@ async function quitToMenu(){
 }
 
 /* =====================================================================
+   FIELD MANUAL - first-run tips for the core city-to-city interaction
+==================================================================== */
+const MANUAL_KEY = 'eastern-front-manual-seen-v1';
+let tutStep = 0;
+
+function manualSeen(){
+  try{ return !!localStorage.getItem(MANUAL_KEY); }catch(e){ return false; }
+}
+
+/* a player city that borders an enemy city - used for the live demo */
+function tutDemo(){
+  const side = game.playerSide;
+  const own = Object.keys(game.cities).filter(id => game.cities[id].owner === side);
+  for(const id of own){
+    if(!game.adj[id]) continue;
+    const to = game.adj[id].find(n => game.cities[n] && game.cities[n].owner !== side);
+    if(to) return { from:id, to, own };
+  }
+  const from = own[0];
+  return { from, to:(game.adj[from] || [])[0] || null, own };
+}
+
+function tutFocus(focus, cities){
+  document.body.classList.toggle('tut-focus-strip', focus === 'strip');
+  document.body.classList.toggle('tut-focus-dock', focus === 'dock');
+  if(renderer) renderer.tutCities = cities || [];
+}
+
+const TUT_STEPS = [
+  {
+    title:'KNOW YOUR CITIES',
+    text:'Every city on the map flies a flag - yours, or the enemy\'s. <b>Rail lines are the only roads armies can use</b>: if two cities share no rail link, no march can pass between them. Your cities are the ones ringed in gold.',
+    enter(){ ui.sel = null; ui.target = null; ui.deploy = null; tutFocus('map', tutDemo().own.slice(0, 4)); }
+  },
+  {
+    title:'SELECT YOUR CITY',
+    text:'<b>Click one of your cities.</b> The command bar at the bottom then shows its garrison, its reserves and everything you can build there. Right-click anywhere to clear the selection.',
+    enter(){ const d = tutDemo(); ui.sel = d.from; ui.target = null; tutFocus('map', [d.from]); }
+  },
+  {
+    title:'CLICK A TARGET',
+    text:'With your city selected, <b>click a connected enemy city</b> to open a march order. The rail line glows red for an enemy target and green for one of your own. No rail link means no attack.',
+    enter(){ const d = tutDemo(); ui.sel = d.from; ui.target = d.to; tutFocus('map', [d.from, d.to]); }
+  },
+  {
+    title:'GIVE THE ORDER',
+    text:'Choose how much of the garrison marches - <b>25 / 50 / 75 / 100%</b> - then press <b>ATTACK</b> for an enemy city or <b>SEND</b> to reinforce your own. Tick <b>AIR</b> to add a bombing run. Whatever stays behind remains on guard.',
+    enter(){ const d = tutDemo(); ui.sel = d.from; ui.target = d.to; tutFocus('strip', [d.to]); }
+  },
+  {
+    title:'RESERVES AND AIR',
+    text:'Those cards are your reserves: <b>click a unit card, then click a green zone near your front</b> - the troops deploy and march to the nearest city. <b>AIR RAID</b> works differently: arm it, then click an enemy city to bomb it.',
+    enter(){ ui.sel = null; ui.target = null; ui.deploy = null; tutFocus('dock', []); }
+  }
+];
+
+function tutRender(){
+  const s = TUT_STEPS[tutStep];
+  $('#tut-kicker').textContent = `FIELD MANUAL - ${tutStep + 1} OF ${TUT_STEPS.length}`;
+  $('#tut-title').textContent = s.title;
+  $('#tut-text').innerHTML = s.text;
+  $('#tut-next').textContent = tutStep === TUT_STEPS.length - 1 ? 'BEGIN' : 'NEXT';
+  $('#tut-dots').innerHTML = TUT_STEPS
+    .map((_, i) => `<span class="tut-dot${i === tutStep ? ' on' : ''}"></span>`).join('');
+  s.enter();
+  refreshStrip();
+}
+
+function startTutorial(force){
+  if(!game || !ui.started || game.phase !== 'play') return;
+  if(!force && manualSeen()) return;
+  try{ localStorage.setItem(MANUAL_KEY, '1'); }catch(e){}
+  tutStep = 0;
+  ui.tutOpen = true;
+  ui.sel = null; ui.target = null; ui.deploy = null;
+  refreshDockSel();
+  $('#tutorial').classList.remove('hidden');
+  tutRender();
+  window.setTimeout(() => { const b = $('#tut-next'); if(b) b.focus(); }, 30);
+}
+
+function tutAdvance(){
+  if($('#tutorial').classList.contains('hidden')) return;
+  Snd.click();
+  if(tutStep >= TUT_STEPS.length - 1){ tutClose(); return; }
+  tutStep += 1;
+  tutRender();
+}
+
+function tutClose(){
+  if($('#tutorial').classList.contains('hidden')) return;
+  $('#tutorial').classList.add('hidden');
+  ui.tutOpen = false;
+  ui.sel = null; ui.target = null; ui.deploy = null;
+  tutFocus('none', []);
+  refreshDockSel();
+  refreshStrip();
+}
+
+$('#tut-next').addEventListener('click', tutAdvance);
+$('#tut-skip').addEventListener('click', () => { Snd.click(); tutClose(); });
+$('#pause-manual').addEventListener('click', () => { Snd.click(); closePause(); startTutorial(true); });
+
+/* =====================================================================
    INTRO
-===================================================================== */
+==================================================================== */
 const prologueMusic = $('#prologue-music');
 const epilogueMusic = $('#epilogue-music');
 const prologueSoundHint = $('#prologue-sound-hint');
@@ -604,6 +708,10 @@ function startGame(side, saveData){
       <div class="r-line">${game.playerSide === 'GER' ? 'Wehrmacht' : 'Red Army'} command resumed - ${game.dateLabel()}</div></div>`);
     const last = $('#reports .report:last-child');
     if(last) setTimeout(() => { last.classList.add('out'); setTimeout(() => last.remove(), 600); }, 6000);
+  } else {
+    window.setTimeout(() => {
+      if(game && game.phase === 'play' && !ui.paused && !ui.dialogOpen) startTutorial(false);
+    }, 1200);
   }
 }
 
@@ -678,15 +786,18 @@ const ICON_SOUND_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 
 const ICON_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor"/></svg>';
 const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>';
 const ICON_RESTART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 6.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v7h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_HELP = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.4 9.2a2.7 2.7 0 0 1 5.2.9c0 1.9-2.6 2.2-2.6 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.15" fill="currentColor"/></svg>';
 
 function buildTopbarStatic(){
   const side = game.playerSide;
   $('#tb-crest').innerHTML = FACTIONS[side].crest;
   $('#tb-faction').innerHTML = `${flagHTML(side)} <span style="vertical-align:middle">${FACTIONS[side].name}</span>`;
   $('#tb-buttons').innerHTML = `
+    <button class="tb-icon" id="btn-manual" title="Field manual" aria-label="Field manual">${ICON_HELP}</button>
     <button class="tb-icon" id="btn-mute" title="Sound and music (M)" aria-label="Sound and music"></button>
     <button class="tb-icon" id="btn-pause" title="Pause (Q/Esc)" aria-label="Pause"></button>
     <button class="tb-icon" id="btn-restart" title="Restart campaign" aria-label="Restart campaign">${ICON_RESTART}</button>`;
+  $('#btn-manual').addEventListener('click', () => { Snd.click(); startTutorial(true); });
   $('#btn-mute').addEventListener('click', toggleMute);
   $('#btn-pause').addEventListener('click', () => { Snd.click(); togglePause(); });
   $('#btn-restart').addEventListener('click', async () => {
@@ -1354,6 +1465,12 @@ window.addEventListener('keydown', e => {
     if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); learnTurn(-1); return; }
   }
   if(!ui.started) return;
+  if(ui.tutOpen){
+    if(e.key === 'Escape'){ e.preventDefault(); tutClose(); }
+    else if(e.key === 'Enter' || e.code === 'Space' || e.key === 'ArrowRight'){ e.preventDefault(); tutAdvance(); }
+    else if(e.key === 'ArrowLeft' && tutStep > 0){ e.preventDefault(); tutStep -= 1; tutRender(); }
+    return;
+  }
   if((e.key === 'Escape' || e.code === 'KeyQ') && !e.repeat){
     e.preventDefault();
     togglePause();
@@ -1372,7 +1489,7 @@ function frame(t){
   const dtReal = Math.min(0.05, (t - lastT)/1000);
   lastT = t;
   try { if(game && renderer){
-    if(ui.started && game.phase === 'play' && !ui.paused && !ui.dialogOpen){
+    if(ui.started && game.phase === 'play' && !ui.paused && !ui.dialogOpen && !ui.tutOpen){
       game.tick(dtReal * 1000 / DAY_MS);
       // ambient battlefield sound - layered by what is actually fighting
       if(game.battles.length){
@@ -1403,7 +1520,7 @@ function frame(t){
       if(ui.started && performance.now() - stripClickAt > 750) refreshStrip();
       ui.lastPanel = t;
     }
-    if(ui.started && game.phase === 'play' && !ui.paused && !ui.dialogOpen && t - ui.lastSave > 20000) saveGame('auto');
+    if(ui.started && game.phase === 'play' && !ui.paused && !ui.dialogOpen && !ui.tutOpen && t - ui.lastSave > 20000) saveGame('auto');
   }
   } catch(e){ (window.__errors = window.__errors || []).push('frame: ' + e.message); }
   requestAnimationFrame(frame);
@@ -1414,24 +1531,3 @@ requestAnimationFrame(frame);
 game = new Game('GER');
 renderer = new Renderer(canvas, game);
 game.day = 0;
-
-/* Lightweight map preview used for the public game's screenshot gallery. */
-const previewParams = new URLSearchParams(window.location.search);
-if(previewParams.get('preview') === 'map'){
-  const previewSide = previewParams.get('side') === 'SOV' ? 'SOV' : 'GER';
-  startGame(previewSide);
-  ui.paused = true;
-  const previewDeploy = previewParams.get('deploy');
-  if(previewDeploy){ ui.deploy = previewDeploy; refreshDockSel(); }
-  const previewCity = previewParams.get('city');
-  if(previewCity && game.cities[previewCity]) ui.sel = previewCity;
-  const previewZoom = Number(previewParams.get('zoom'));
-  if(Number.isFinite(previewZoom) && previewZoom > 1){
-    renderer.zoom = Math.min(4, previewZoom);
-    renderer.pan = {
-      x: Number(previewParams.get('panX')) || 0,
-      y: Number(previewParams.get('panY')) || 0
-    };
-    renderer.applyView();
-  }
-}

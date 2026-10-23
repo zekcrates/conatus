@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Cormorant+SC:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=57">
+<link rel="stylesheet" href="css/style.css?v=58">
 </head>
 <body class="intro-unlocked" data-side="GER">
 <canvas id="map"></canvas>
@@ -123,6 +123,21 @@
   </div>
 </div>
 
+<!-- ============ FIELD MANUAL (first-run tips) ============ -->
+<div id="tutorial" class="hidden" role="dialog" aria-modal="true" aria-labelledby="tut-title" aria-describedby="tut-text">
+  <div class="tut-scrim"></div>
+  <div class="tut-card">
+    <div class="tut-kicker" id="tut-kicker">FIELD MANUAL - 1 OF 5</div>
+    <h2 id="tut-title">KNOW YOUR CITIES</h2>
+    <p id="tut-text"></p>
+    <div class="tut-actions">
+      <button id="tut-skip" class="tut-btn ghost">SKIP</button>
+      <div class="tut-dots" id="tut-dots"></div>
+      <button id="tut-next" class="tut-btn primary">NEXT</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ PAUSE MENU ============ -->
 <div id="pause" class="hidden">
   <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
@@ -134,6 +149,7 @@
       <button id="pause-save" class="pause-btn">SAVE GAME</button>
       <button id="pause-sound" class="pause-btn">SOUND: ON</button>
       <button id="pause-new" class="pause-btn danger">NEW GAME</button>
+      <button id="pause-manual" class="pause-btn">FIELD MANUAL</button>
       <button id="pause-menu" class="pause-btn">QUIT TO MENU</button>
     </div>
     <div id="pause-status" class="pause-status">Progress autosaves while you play.</div>
@@ -162,10 +178,10 @@
 </div>
 
 <script src="js/data.js?v=48"></script>
-<script src="js/engine.js?v=45"></script>
-<script src="js/ai.js?v=45"></script>
-<script src="js/render.js?v=49"></script>
-<script src="js/main.js?v=63"></script>
+<script src="js/engine.js?v=47"></script>
+<script src="js/ai.js?v=46"></script>
+<script src="js/render.js?v=50"></script>
+<script src="js/main.js?v=64"></script>
 </body>
 </html>
 
