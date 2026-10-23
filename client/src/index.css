@@ -364,6 +364,71 @@ a { color: inherit; text-decoration: none; }
 .auth-terms { max-width: 330px; margin: 22px auto 0; color: #929087; text-align: center; font-size: 11px; line-height: 1.55; }
 .auth-terms a { color: #6a675f; text-decoration: underline; text-underline-offset: 2px; }
 
+/* Small-screen polish for the public Conatus site. The game itself remains desktop-oriented. */
+@media (max-width: 520px) {
+  .site-shell { padding: 0 16px; }
+  .site-header { height: 70px; }
+  .brand { font-size: 17px; }
+  .header-actions { gap: 12px; }
+  .header-store { font-size: 9px; }
+
+  .hero { padding: 62px 0 78px; }
+  .hero h1 { margin-top: 16px; font-size: clamp(42px, 13vw, 56px); }
+  .hero-description { font-size: 14px; }
+  .featured-section { padding-bottom: 78px; }
+  .featured-row { padding: 20px 0 42px; }
+  .featured-copy { padding-top: 24px; }
+  .featured-copy h2 { font-size: 42px; }
+  .featured-copy > p:not(.eyebrow) { font-size: 15px; }
+
+  .product-page { padding: 26px 0 70px; }
+  .product-info { padding-top: 38px; }
+  .product-info h1 { font-size: clamp(52px, 17vw, 66px); }
+  .product-lead { font-size: 18px; }
+  .product-description { font-size: 13px; }
+  .product-facts { grid-template-columns: repeat(2, 1fr); gap: 18px 12px; margin-top: 30px; }
+  .product-facts div:last-child { grid-column: 1 / -1; }
+  .product-section { padding: 64px 0; }
+  .product-section h2, .section-heading h2, .game-screenshots-heading h2 { font-size: 32px; }
+  .section-heading { display: block; padding: 20px 0 26px; }
+  .section-heading p { margin-top: 9px; }
+  .overview-copy { font-size: 15px; }
+  .command-grid { gap: 14px; }
+  .command-grid article { padding: 18px 17px 21px; }
+  .units-list { grid-template-columns: 1fr 1fr; }
+  .units-list div { min-height: 86px; padding: 12px; }
+  .units-list span { font-size: 12px; }
+  .units-list small { font-size: 8px; }
+  .purchase-card { min-height: 88px; margin-top: 26px; padding: 12px; }
+  .purchase-launch { min-height: 54px; padding: 16px; }
+
+  .game-entry-info { flex-direction: column; gap: 8px; }
+  .game-status { align-self: flex-start; }
+  .game-screenshots { padding-bottom: 54px; }
+  .game-screenshots-heading { display: block; }
+  .game-screenshots-heading div { margin-top: 14px; }
+  .game-screenshots-rail figure { flex-basis: 88vw; }
+  .screenshot-lightbox { padding: 16px; }
+  .screenshot-lightbox-frame img { max-width: calc(100vw - 32px); max-height: calc(100vh - 32px); }
+  .screenshot-lightbox-close { top: 8px; right: 8px; }
+
+  .site-footer { padding: 42px 16px 20px; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 30px 16px; }
+  .footer-column { font-size: 12px; }
+  .footer-bottom { margin-top: 38px; font-size: 8px; }
+
+  .store-main, .basic-main { padding-left: 16px; padding-right: 16px; }
+  .store-heading h1, .basic-header h1 { font-size: clamp(52px, 17vw, 74px); }
+  .store-search { margin-top: 32px; }
+  .store-grid { margin-top: 42px; gap: 40px; }
+  .store-card-info { flex-direction: column; gap: 10px; }
+  .store-card-price { align-items: flex-start; text-align: left; }
+  .basic-header { padding: 24px 0 46px; }
+  .basic-header > p:last-child { font-size: 16px; }
+  .basic-content { padding-top: 42px; }
+  .basic-copy { font-size: 15px; line-height: 1.65; }
+}
+
 @media (max-width: 760px) {
   .site-shell { padding: 0 20px; }
   .hero { display: block; padding: 78px 0 100px; }
