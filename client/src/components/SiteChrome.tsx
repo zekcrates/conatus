@@ -15,7 +15,7 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-main">
-        <div className="footer-brand"><a href="/#top" className="footer-logo">Conatus</a><p>Independent browser games<br />about history and economics.</p></div>
+        <div className="footer-brand"><a href="/#top" className="footer-logo">Conatus</a><p>Simple, fun games.</p></div>
         <div className="footer-column"><p className="footer-heading">Explore</p><a href="/store">Store</a><a href="/games">Games</a><a href="/about">About us</a></div>
         <div className="footer-column"><p className="footer-heading">Contact</p><a href="/contact">Email us</a><a href={coffeeUrl} target="_blank" rel="noreferrer">Buy us a coffee</a></div>
         <div className="footer-column"><p className="footer-heading">Information</p><a href="/privacy">Privacy policy</a><a href="/terms">Terms of use</a></div>

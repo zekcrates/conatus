@@ -1,0 +1,1229 @@
+/* tanaland/web/css/style.css
+   ---------------------------------------------------------------------------
+   Layout and components. All colour/type values come from theme.css tokens —
+   this file contains no colour literals except transparent/none.
+   ------------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--t-base);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-feature-settings: "cv05" 1, "ss01" 1;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--s4) var(--s5) var(--s8);
+}
+
+@media (max-width: 700px) {
+  #app { padding: var(--s3) var(--s3) var(--s6); }
+}
+
+::selection { background: var(--green-wash); color: var(--green); }
+
+/* ------------------------------------------------------------- typography */
+h1, h2, h3, h4 {
+  font-weight: 640;
+  letter-spacing: -0.021em;
+  margin: 0;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+h1 { font-size: var(--t-2xl); }
+h2 { font-size: var(--t-lg); letter-spacing: -0.016em; }
+h3 { font-size: var(--t-base); letter-spacing: -0.008em; }
+
+p {
+  line-height: 1.62;
+  color: var(--ink-2);
+  margin: 0 0 var(--s3);
+}
+
+.lede {
+  font-size: var(--t-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+
+.eyebrow {
+  font-size: var(--t-xs);
+  font-weight: 620;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: var(--s2);
+}
+
+.hint {
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.note {
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ---------------------------------------------------------------- buttons */
+button {
+  font-family: inherit;
+  font-size: var(--t-base);
+  font-weight: 570;
+  letter-spacing: -0.006em;
+  border-radius: var(--r);
+  padding: 10px 18px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background .16s ease, border-color .16s ease, color .16s ease,
+              box-shadow .16s ease, transform .06s ease;
+}
+
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible { outline: none; box-shadow: var(--ring); }
+
+.primary {
+  background: var(--green);
+  color: var(--on-green);
+  border-color: var(--green);
+  box-shadow: var(--shadow-1);
+}
+.primary:hover:not(:disabled) { background: var(--green-2); border-color: var(--green-2); }
+
+.ghost {
+  background: var(--card);
+  color: var(--ink-2);
+  border-color: var(--line-2);
+}
+.ghost:hover:not(:disabled) { border-color: var(--ink-4); color: var(--ink); }
+
+.quiet {
+  background: transparent;
+  color: var(--ink-3);
+  border-color: transparent;
+  padding: 10px 12px;
+}
+.quiet:hover:not(:disabled) { color: var(--ink); background: var(--paper-2); }
+
+.wide { width: 100%; }
+
+.row {
+  display: flex;
+  gap: var(--s2);
+  flex-wrap: wrap;
+  margin-top: var(--s5);
+  align-items: center;
+}
+
+/* ------------------------------------------------------------------ intro */
+.intro {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  gap: var(--s8);
+  align-items: center;
+  padding: var(--s6);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .intro { grid-template-columns: 1fr; gap: var(--s6); padding: var(--s5) var(--s4); }
+}
+
+.intro h1 {
+  font-size: var(--t-3xl);
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin-bottom: var(--s4);
+}
+
+.intro-sub {
+  font-size: var(--t-md);
+  color: var(--ink-3);
+  line-height: 1.6;
+  max-width: 46ch;
+  margin-bottom: var(--s5);
+}
+
+.intro-rule {
+  height: 1px;
+  background: var(--line);
+  margin: var(--s5) 0;
+  max-width: 420px;
+}
+
+.intro-aside {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: var(--s6);
+  box-shadow: var(--shadow-2);
+}
+
+.intro-aside h3 {
+  font-size: var(--t-sm);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--ink-3);
+  margin-bottom: var(--s4);
+  font-weight: 620;
+}
+
+.spec { display: grid; gap: 0; }
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--t-sm);
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-row .k { color: var(--ink-3); }
+.spec-row .v { color: var(--ink); font-weight: 580; font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------- top bar */
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--s5);
+  padding: var(--s3) var(--s4);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  margin-bottom: var(--s3);
+  box-shadow: var(--shadow-1);
+}
+
+@media (max-width: 860px) {
+  .topbar { grid-template-columns: 1fr; gap: var(--s3); }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-weight: 680;
+  font-size: var(--t-base);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.brand-mark {
+  width: 24px; height: 24px;
+  border-radius: 7px;
+  background: var(--green);
+  display: grid;
+  place-items: center;
+  color: var(--on-green);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  flex: none;
+}
+
+/* session progress: six segments */
+.session-track {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-width: 0;
+}
+
+.segments { display: flex; gap: 3px; flex: 1; min-width: 0; }
+
+.segment {
+  height: 5px;
+  flex: 1;
+  border-radius: 3px;
+  background: var(--line);
+  transition: background .2s ease;
+}
+.segment.done { background: var(--green-3); }
+.segment.current { background: var(--green); }
+
+.clock-text { white-space: nowrap; display: grid; }
+
+.clock-main {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-sub {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+
+.topstats { display: flex; gap: var(--s2); }
+
+.pill {
+  display: grid;
+  gap: 1px;
+  padding: 6px 12px;
+  min-width: 84px;
+  background: var(--card-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+}
+
+.pill-label {
+  font-size: 9.5px;
+  font-weight: 620;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.pill-value {
+  font-size: var(--t-base);
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.pill.up .pill-value { color: var(--green-2); }
+.pill.down .pill-value { color: var(--clay); }
+
+/* ----------------------------------------------------------------- layout */
+/* Briefing left, programme right. The programme starts at the top of the page
+   beside the briefing — not below it — so the sliders are reachable in one
+   glance, and it stays in view while the record scrolls (sticky). */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(380px, .85fr);
+  gap: var(--s3);
+  align-items: start;
+}
+
+.col-main {
+  display: grid;
+  gap: var(--s3);
+  min-width: 0;
+}
+
+.col-side {
+  min-width: 0;
+  position: sticky;
+  top: var(--s3);
+}
+
+@media (max-width: 1080px) {
+  .layout { grid-template-columns: 1fr; }
+  /* On one column the programme belongs *before* the long charts, so it is not
+     stranded below the fold. */
+  .col-side { position: static; order: -1; }
+}
+
+.briefing-panel { border-left: 3px solid var(--green); }
+
+.record-panel .charts { border: none; }
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-1);
+}
+
+.panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.panel-head h2 {
+  font-size: var(--t-base);
+  font-weight: 640;
+  letter-spacing: -0.01em;
+}
+
+.panel-head .hint { font-size: var(--t-xs); }
+
+/* ----------------------------------------------------------------- charts */
+.charts {
+  padding: var(--s3);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s3);
+}
+
+@media (max-width: 640px) {
+  .charts { grid-template-columns: 1fr; }
+}
+
+.chart-box {
+  background: var(--card-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  padding: var(--s2) var(--s3) var(--s1);
+  min-width: 0;
+}
+
+.chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s2);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: .02em;
+}
+
+.chart-last {
+  font-size: var(--t-base);
+  font-weight: 650;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.chart-canvas { margin-top: var(--s1); }
+.chart { display: block; overflow: visible; }
+
+.charts-empty {
+  grid-column: 1 / -1;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  padding: var(--s6);
+  text-align: center;
+}
+
+/* ------------------------------------------------------- what to look at */
+/* The clerk's notes: at most three, urgent first. This is the thing the player
+   acts on, so it comes before the figures and is the loudest thing in the panel. */
+.concerns {
+  display: grid;
+  gap: 6px;
+  margin: var(--s4) 0 var(--s4);
+}
+
+.concern {
+  border-radius: var(--r);
+  padding: 10px 12px;
+  border-left: 3px solid var(--line-2);
+  background: var(--card-2);
+}
+
+.concern-urgent { border-left-color: var(--clay); background: var(--clay-wash); }
+.concern-watch  { border-left-color: var(--amber); background: var(--amber-wash); }
+.concern-calm   { border-left-color: var(--green-2); background: var(--green-wash); }
+
+.concern-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2);
+  margin-bottom: 3px;
+}
+
+.concern-title {
+  font-size: var(--t-sm);
+  font-weight: 650;
+  color: var(--ink);
+  letter-spacing: -0.008em;
+}
+
+.concern-level {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 20px;
+  flex: none;
+  background: var(--paper-2);
+  color: var(--ink-3);
+}
+.level-urgent { background: var(--clay); color: var(--on-clay); }
+.level-watch  { background: var(--amber-wash); color: var(--amber); }
+.level-calm   { background: var(--green-wash); color: var(--green); }
+
+.concern-text {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------- recap */
+/* What the last twenty months did, said plainly, right under the report. */
+.recap { margin-top: var(--s4); }
+
+.recap-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.recap-item {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* A dot rather than an arrow: the change is what happened, not a judgement. */
+.recap-item::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: .58em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--line-2);
+}
+.recap-item.up::before { background: var(--green-2); }
+.recap-item.down::before { background: var(--clay); }
+
+.recap-busy {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  line-height: 1.5;
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line-soft);
+}
+
+/* ------------------------------------------------------- briefing panel */
+/* Now roughly half the page, so it is set as a column of readable prose rather
+   than a full-width despatch. */
+.briefing-panel { padding: clamp(var(--s4), 2vw, var(--s5)); }
+
+.briefing { max-width: 100%; }
+
+.briefing h2 {
+  font-size: var(--t-lg);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--s3);
+}
+
+.report-line {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  margin-bottom: .55em;
+  line-height: 1.6;
+  max-width: 64ch;
+}
+
+/* Figures and observations are two different things and are laid out two
+   different ways. Previously all five sat in one equal-column grid, so a cell
+   holding "1,600 Tupis · 800 Moros" was the same width as one holding a whole
+   sentence, and the sentences were crushed into a column. */
+.briefing .stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin: var(--s4) 0 10px;
+}
+
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  padding: 10px 12px;
+  background: var(--card-2);
+}
+
+.stat-k,
+.note-k {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.stat-v {
+  font-size: var(--t-md);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Each observation gets the whole width, so the prose reads as a sentence. */
+.briefing .note-list {
+  display: grid;
+  gap: 6px;
+  margin-bottom: var(--s4);
+}
+
+.note-tile {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--s2);
+  border-left: 2px solid var(--line-2);
+  padding: 8px 0 8px 12px;
+  background: var(--card-2);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+
+.note-v {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+@media (max-width: 520px) {
+  .note-tile { grid-template-columns: 1fr; gap: 2px; }
+}
+
+.facts { display: grid; gap: 0; margin: var(--s3) 0 var(--s1); }
+
+.fact {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  font-size: var(--t-sm);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.fact:last-child { border-bottom: none; }
+
+.fact-k { color: var(--ink-3); }
+.fact-v {
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- surveys */
+/* Investigation, not a readout: you choose questions to ask, they cost money,
+   and the answers come back in the next report as estimates. */
+.surveys { margin-top: var(--s4); }
+
+.survey-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 8px var(--s2);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line-soft);
+  cursor: pointer;
+}
+.survey-row:last-of-type { border-bottom: none; }
+.survey-row:hover .survey-name { color: var(--green); }
+
+.survey-check {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--green);
+  cursor: pointer;
+  align-self: start;
+  margin-top: 2px;
+}
+
+.survey-name {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--ink);
+  transition: color .14s ease;
+}
+
+.survey-q {
+  grid-column: 2 / 3;
+  font-size: 11px;
+  color: var(--ink-3);
+  line-height: 1.35;
+  margin-top: -3px;
+}
+
+.survey-cost {
+  font-size: var(--t-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-4);
+  font-weight: 600;
+}
+
+.survey-cost-line { margin-top: 8px; }
+
+/* findings shown in the next briefing */
+.findings {
+  margin-top: var(--s4);
+  padding-top: var(--s3);
+  border-top: 1px dashed var(--line-2);
+}
+
+.finding {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin-bottom: .45em;
+  max-width: 68ch;
+}
+
+.finding-name {
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.finding.refused { color: var(--clay); }
+
+/* -------------------------------------------------------------- measures */
+/* Nine measures in a side column: the blurb is supporting detail, so it is
+   quieter than the name and the dosage readout, and the whole tile is tight
+   enough that a session's programme fits without endless scrolling. */
+.measures { padding: var(--s4) var(--s4) var(--s4); }
+
+.measures > h3 {
+  font-size: var(--t-lg);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.group-label {
+  font-size: var(--t-xs);
+  font-weight: 620;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: var(--s4) 0 var(--s2);
+}
+.group-label:first-of-type { margin-top: var(--s3); }
+
+.measure {
+  background: var(--card-2);
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid transparent;
+  border-radius: var(--r);
+  padding: 10px var(--s3) 12px;
+  margin-bottom: 8px;
+  transition: border-color .16s ease, background .16s ease;
+}
+
+.measure:hover { border-color: var(--line-2); }
+
+.measure.active {
+  background: var(--green-wash);
+  border-color: var(--green-line);
+  border-left-color: var(--green);
+}
+
+.measure-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s2);
+}
+
+.measure-name {
+  font-size: var(--t-sm);
+  font-weight: 620;
+  color: var(--ink);
+  letter-spacing: -0.006em;
+}
+
+.slider-val {
+  font-size: var(--t-xs);
+  font-weight: 650;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.measure.active .slider-val { color: var(--green); }
+
+.measure-blurb {
+  font-size: 11px;
+  color: var(--ink-3);
+  line-height: 1.4;
+  margin-top: 3px;
+}
+
+/* The blurb is context, not instruction: keep it out of the way until needed. */
+.measure .measure-blurb { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .18s ease, opacity .18s ease; }
+.measure:hover .measure-blurb,
+.measure.active .measure-blurb,
+.measure:focus-within .measure-blurb { max-height: 64px; opacity: 1; margin-top: 4px; }
+
+/* --------------------------------------------------------------- sliders */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  margin: var(--s2) 0 0;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line-2);
+}
+.slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line-2);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--ink-4);
+  margin-top: -6px;
+  transition: border-color .16s ease, transform .1s ease;
+  box-shadow: var(--shadow-1);
+}
+.slider:hover::-webkit-slider-thumb { border-color: var(--green-2); }
+.slider:active::-webkit-slider-thumb { transform: scale(1.1); }
+.slider:focus-visible::-webkit-slider-thumb { box-shadow: var(--ring); }
+
+.slider::-moz-range-thumb {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--ink-4);
+  box-shadow: var(--shadow-1);
+}
+
+.measure.active .slider::-webkit-slider-thumb { border-color: var(--green); background: var(--green); }
+.measure.active .slider::-moz-range-thumb { border-color: var(--green); background: var(--green); }
+
+.cost-line {
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  margin: var(--s4) 0 var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--line-soft);
+  line-height: 1.5;
+}
+
+.cost-line strong { color: var(--ink); font-weight: 620; }
+
+.cta { margin-top: var(--s2); }
+
+/* ---------------------------------------------------------------- report */
+/* ---------------------------------------------------------------- report */
+/* Four sections, read top to bottom: verdict → what was hidden → findings →
+   how you decided. One column, generous spacing, nothing competing. */
+.report {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--s6) var(--s4) var(--s8);
+  display: grid;
+  gap: var(--s3);
+}
+
+.report > section { border-radius: var(--r-lg); }
+
+/* ---- 1. verdict ---------------------------------------------------------- */
+.verdict-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--line-2);
+  border-radius: var(--r-xl);
+  padding: clamp(var(--s5), 4vw, var(--s7));
+  box-shadow: var(--shadow-2);
+}
+.verdict-good { border-top-color: var(--green); }
+.verdict-mixed { border-top-color: var(--amber); }
+.verdict-bad { border-top-color: var(--clay); }
+.verdict-catastrophic { border-top-color: var(--clay); background: var(--clay-wash); }
+
+.verdict-card h1 {
+  font-size: clamp(26px, 3.4vw, 38px);
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  margin-bottom: 6px;
+}
+
+/* The band, as a word. It replaces "73 / 100": a named outcome the model can
+   actually defend, instead of a number implying a precision it does not have. */
+.verdict-band {
+  display: inline-block;
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin: 0 0 var(--s4);
+  background: var(--paper-2);
+  color: var(--ink-3);
+}
+.band-good { background: var(--green-wash); color: var(--green); }
+.band-mixed { background: var(--amber-wash); color: var(--amber); }
+.band-bad, .band-catastrophic { background: var(--clay); color: var(--on-clay); }
+
+/* The account of what happened, in words. This is the report's centre of
+   gravity, so it gets the reading size, not the caption size. */
+.verdict-story {
+  font-size: var(--t-base);
+  line-height: 1.62;
+  color: var(--ink-2);
+  max-width: 62ch;
+  margin: 0 0 var(--s4);
+}
+
+.report-facts.compact {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-top: 0;
+}
+
+@media (max-width: 560px) {
+  .verdict-row { grid-template-columns: 1fr; gap: var(--s3); }
+}
+
+/* ---- 3. what your programme did ------------------------------------------ */
+.prog-did {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: var(--s5);
+}
+
+.prog-did h2 {
+  font-size: var(--t-md);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.prog-list { display: grid; gap: 0; margin-top: var(--s3); }
+
+.prog-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 200px) minmax(0, 1fr);
+  gap: var(--s3);
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.prog-row:last-child { border-bottom: none; }
+
+.prog-name {
+  font-size: var(--t-sm);
+  font-weight: 620;
+  color: var(--ink);
+}
+
+.prog-what {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .prog-row { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* ---- 2. the reveal ------------------------------------------------------- */
+.reveal {
+  background: var(--green-wash);
+  border: 1px solid var(--green-line);
+  padding: var(--s5);
+}
+
+.reveal h2 {
+  font-size: var(--t-md);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  color: var(--green);
+}
+
+.reveal-lead {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0 0 var(--s4);
+  max-width: 64ch;
+}
+
+.report-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.report-facts .fact {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border: 1px solid var(--green-line);
+  border-radius: var(--r);
+  padding: 11px 13px;
+  background: var(--card);
+}
+
+.report-facts .fact-k {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.report-facts .fact-v {
+  text-align: left;
+  font-size: var(--t-lg);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---- 3. findings --------------------------------------------------------- */
+.findings-summary {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: var(--s5);
+}
+
+.findings-summary h2 {
+  font-size: var(--t-md);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--s3);
+}
+
+.verdict-notes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.verdict-notes li {
+  background: var(--card-2);
+  border-left: 3px solid var(--line-2);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+.note-good     { border-left-color: var(--green-2); }
+.note-warn     { border-left-color: var(--amber); }
+.note-bad      { border-left-color: var(--clay); }
+.note-critical { border-left-color: var(--clay); background: var(--clay-wash); }
+
+/* ------------------------------------------------------------ diagnosis */
+/* ---- 4. how you decided -------------------------------------------------- */
+.diagnosis {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: clamp(var(--s5), 3vw, var(--s6));
+  box-shadow: var(--shadow-1);
+}
+
+.diagnosis h2 {
+  font-size: var(--t-xl);
+  letter-spacing: -0.025em;
+  margin-bottom: var(--s3);
+}
+
+.diagnosis-summary {
+  font-size: var(--t-base);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 64ch;
+  margin-bottom: var(--s4);
+}
+
+.traits { display: grid; gap: 8px; margin-bottom: var(--s4); }
+
+.trait {
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--line-2);
+  border-radius: var(--r);
+  padding: 12px var(--s4);
+  background: var(--card-2);
+}
+
+.trait-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s3);
+  margin-bottom: 5px;
+}
+
+.trait-title {
+  font-size: var(--t-sm);
+  font-weight: 620;
+  color: var(--ink);
+  letter-spacing: -0.008em;
+}
+
+.trait-badge {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex: none;
+  background: var(--paper-2);
+  color: var(--ink-3);
+}
+
+/* Badges are toned by outcome, so the eye can scan the column: green = did it,
+   amber = partly, grey/red = did not. */
+.trait-badge.tone-good { background: var(--green-wash); color: var(--green); }
+.trait-badge.tone-mid  { background: var(--amber-wash); color: var(--amber); }
+.trait-badge.tone-off  { background: var(--paper-2); color: var(--ink-3); }
+
+.trait-observed {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.trait-book {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  margin: 0;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* The left rule carries the same signal for the badge-less glance. */
+.trait-strong     { border-left-color: var(--green-2); }
+.trait-partial    { border-left-color: var(--amber); }
+.trait-firm       { border-left-color: var(--blue); }
+.trait-absent     { border-left-color: var(--clay); }
+.trait-restless   { border-left-color: var(--clay); }
+.trait-escalating { border-left-color: var(--clay); }
+.trait-restrained,
+.trait-nothing,
+.trait-unknown    { border-left-color: var(--line-2); }
+
+.diagnosis-note {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  line-height: 1.55;
+  margin: 0;
+  padding-top: var(--s3);
+  border-top: 1px solid var(--line-soft);
+}
+
+.report-foot {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--s2);
+}
+
+/* -------------------------------------------------------------- progress */
+/* Shown while a session's twenty months run. Without this the form stayed on
+   screen and looked inert, so impatient clicks each advanced another session. */
+.progress-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--s5);
+}
+
+.progress-card {
+  width: min(520px, 100%);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: clamp(var(--s5), 4vw, var(--s7));
+  box-shadow: var(--shadow-2);
+  text-align: left;
+}
+
+.progress-card h1 {
+  font-size: clamp(22px, 3vw, 30px);
+  letter-spacing: -0.025em;
+  margin: 4px 0 var(--s3);
+}
+
+.progress-lead {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0 0 var(--s5);
+}
+
+.progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line-soft);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  background: var(--green);
+  transition: width .12s linear;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin-top: 10px;
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-pct { font-weight: 650; color: var(--ink-2); }
+
+/* The commit button also greys out and relabels itself the instant it is used. */
+.commit-btn.is-busy,
+.commit-btn:disabled {
+  opacity: .65;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------- utilities */
+.stack > * + * { margin-top: var(--s3); }
+.divider { height: 1px; background: var(--line); margin: var(--s5) 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

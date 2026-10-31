@@ -1,0 +1,36 @@
+// H-26 replacement, written to tests/hypotheses.test.mjs by tools/_h26.mjs
+// ── H-26 ─────────────────────────────────────────────────────────────────────
+// Tourism pays only under its conditions: enough beds, and hands free to serve
+// the visitors. (LoF pp.94–95; manual 9.7: advertising lifts occupancy to 150 %,
+// hotel beds bring trade.)
+{
+  // leg 1 — the labour condition: the same beds serve far fewer visitors when
+  // nobody is free to work them
+  const { runMonths, step } = await import('../engine/game.js');
+  const mk = (extraJobs) => { const s = initialState(1000); s.tourism.rooms = 130; s.other.jobs += extraJobs; runMonths(s, 3); return s; };
+  const idleTown = mk(0), tightTown = mk(400);
+  const served = (s) => Math.round(s.tourism.rooms * (1 - 0.75 * s.tourism.staffShortage));
+  const labourLeg = tightTown.unemploymentRate < 0.01 && served(idleTown) > 1.5 * served(tightTown);
+  void step;
+
+  // leg 2 — the bed condition: the same campaign pays for itself where there are
+  // beds to fill, and does not where there are not
+  const rev = (s) => s.history.slice(-36).reduce((a2, h) => a2 + h.tourismRevenue, 0);
+  const campaignNet = (rooms) => SEEDS.map(seed => {
+    const s = initialState(seed);
+    s.tourism.rooms = rooms;
+    s.society.reputation = 0.8; s.society.crime = 0.05;
+    s.fac.sports.condition = 0.9; s.fac.parks.condition = 0.9; s.fac.library.condition = 0.9;
+    s.housing.queue = 8;
+    runMonths(s, 12);
+    const w = cloneState(s); applyIntent(w, { type: 'promoteTourism' });
+    const n = cloneState(s);
+    runMonths(w, 36); runMonths(n, 36);
+    return rev(w) - rev(n) - 180000;                 // net of the campaign's cost
+  });
+  const manyBeds = mean(campaignNet(220));
+  const fewBeds = mean(campaignNet(40));
+  verdict('H-26', 'Tourism pays only under its conditions: the same beds serve half as many visitors where nobody is free to work them, and the same campaign repays its cost only in a town with beds to fill',
+    labourLeg && manyBeds > 0 && fewBeds < 0,
+    `beds served: ${served(idleTown)} with idle hands vs ${served(tightTown)} at full employment; 36-month net after costs: ${Math.round(manyBeds)} DM with 220 beds vs ${Math.round(fewBeds)} DM with 40`);
+}

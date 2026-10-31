@@ -1,3 +1,3 @@
 # Conatus
 
-Independent browser games about history and economics.
+Simple, fun games.

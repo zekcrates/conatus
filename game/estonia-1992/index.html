@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Little Country that Could — Estonia, 1992</title>
+    <link rel="stylesheet" href="ui.css?v=80" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  </head>
+  <body>
+    <script>
+      window.__errors = [];
+      window.addEventListener("error", (event) => window.__errors.push(String(event.message) + " @ " + String(event.filename) + ":" + String(event.lineno)));
+      window.addEventListener("unhandledrejection", (event) => window.__errors.push("rejection: " + String(event.reason)));
+    </script>
+
+    <!-- the cold open: the country before you -->
+    <section id="cold-open" class="cold-open" aria-live="polite">
+      <div id="cold-line" class="cold-line"></div>
+      <button id="cold-skip" class="cold-skip" type="button">Skip intro</button>
+      <div class="cold-hint">Click to continue</div>
+      <div id="cold-count" class="cold-count"></div>
+    </section>
+
+    <!-- the title screen, prologue pages, decisions, letters, the report -->
+    <div id="ui-root" class="ui-root"></div>
+
+    <!-- the game: the minister's morning, one plain page -->
+    <div id="game" class="screen" hidden>
+      <div id="app-pad">
+        <header class="topbar">
+          <div class="brand">
+            <span class="brand-mark">ER</span>
+            <div>
+              <div class="brand-name">A Little Country that Could</div>
+              <div class="brand-sub" id="date-line">November 1992</div>
+            </div>
+          </div>
+          <div class="kpis" id="kpis"></div>
+        </header>
+
+        <main class="layout">
+          <div id="briefing"></div>
+          <section class="panel chart-panel">
+            <div class="tabs" id="chart-tabs"></div>
+            <div class="chart-wrap"><img id="chart-img" alt="The term's series"></div>
+          </section>
+          <div id="decision-slot"></div>
+          <div class="advance-row" id="advance-row"></div>
+        </main>
+      </div>
+    </div>
+
+    <script type="module" src="src/ui.js?v=79"></script>
+  </body>
+</html>

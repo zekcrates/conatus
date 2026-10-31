@@ -104,10 +104,11 @@ a { color: inherit; text-decoration: none; }
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 25px 0 36px; }
 .section-heading h2 { margin: 0; font-size: 41px; letter-spacing: -.075em; }
 .section-heading p { margin: 0; color: #7d7a71; font-family: Consolas, monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
-.games-grid { display: flex; gap: 28px; overflow-x: auto; padding-bottom: 18px; scroll-snap-type: x mandatory; scrollbar-color: #a85b2c #d5d2c8; scrollbar-width: thin; }
-.games-grid::-webkit-scrollbar { height: 6px; }
-.games-grid::-webkit-scrollbar-track { background: #d5d2c8; }
-.games-grid::-webkit-scrollbar-thumb { background: #a85b2c; }
+.games-grid { display: flex; gap: 28px; overflow-x: auto; padding-bottom: 18px; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+.games-grid::-webkit-scrollbar { display: none; }
+.rail-nav { display: flex; align-self: center; gap: 7px; }
+.rail-nav button { width: 33px; height: 33px; border: 1px solid #c9c6bb; background: transparent; color: #1d1d1a; cursor: pointer; font-size: 16px; line-height: 1; }
+.rail-nav button:hover { border-color: #a85b2c; color: #a85b2c; }
 .game-entry { display: block; }
 .game-entry { flex: 0 0 min(420px, 42vw); scroll-snap-align: start; }
 .game-poster { position: relative; aspect-ratio: .82; overflow: hidden; color: #f4f1e8; }
@@ -117,6 +118,11 @@ a { color: inherit; text-decoration: none; }
 .poster-stalingrad .poster-number, .poster-stalingrad .poster-title, .poster-stalingrad .poster-meta, .poster-stalingrad .poster-mark { display: none; }
 .poster-next { background: #919a98; }
 .poster-next::after { content: ""; position: absolute; width: 72%; height: 72%; left: 14%; top: 14%; border: 1px solid rgba(244,241,232,.55); transform: rotate(-18deg); }
+.poster-lohhausen { background: #4d585f; }
+.poster-lohhausen .poster-title { font-size: clamp(30px, 4.4vw, 60px); }
+.poster-lohhausen::after { content: ""; position: absolute; inset: auto 0 0; height: 32%; background: rgba(18,23,26,.38); clip-path: polygon(0 46%, 7% 20%, 14% 46%, 21% 20%, 28% 46%, 35% 20%, 42% 46%, 49% 20%, 56% 46%, 63% 20%, 70% 46%, 77% 20%, 84% 46%, 91% 20%, 98% 46%, 100% 38%, 100% 100%, 0 100%); }
+.poster-tanaland { background: #a8884e; }
+.poster-tanaland::after { content: ""; position: absolute; left: 50%; bottom: -46%; width: 130%; aspect-ratio: 1; transform: translateX(-50%); border: 1px solid rgba(244,241,232,.5); border-radius: 50%; }
 .poster-number, .poster-meta, .poster-title, .poster-mark { position: absolute; z-index: 1; }
 .poster-number { top: 22px; left: 24px; font-family: Consolas, monospace; font-size: 10px; letter-spacing: .12em; }
 .poster-title { left: 24px; bottom: 51px; max-width: 80%; font-size: clamp(35px, 5vw, 66px); line-height: .86; letter-spacing: -.09em; font-weight: 700; }

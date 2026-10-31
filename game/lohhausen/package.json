@@ -1,0 +1,6 @@
+{
+  "name": "lohhausen-1981",
+  "private": true,
+  "type": "module",
+  "description": "Browser reconstruction of Dörner et al.'s Lohhausen (1981) town simulation"
+}

@@ -1,0 +1,96 @@
+/* tanaland/web/css/theme.css
+   ---------------------------------------------------------------------------
+   The single source of truth for colour, type and space.
+
+   Nothing else in the project may contain a colour literal. The SVG map and the
+   charts read these tokens through getComputedStyle, so re-theming means
+   editing this file and nothing else.
+
+   The direction: a *modern instrument*, not a period document. The game is
+   about watching slow variables you cannot see, so the surface is a clean light
+   field that lets data breathe — deep green as the structural colour (land,
+   growth, the thing at stake) and a hot clay red reserved strictly for
+   damage. Neutrals are warmed a touch so the white doesn't read as clinical.
+
+   Deliberately NOT: ochre-on-charcoal, serif display type, sepia. That is the
+   default "serious historical" skin and says nothing about Tanaland.
+   ------------------------------------------------------------------------- */
+
+:root {
+  /* ---- ground ------------------------------------------------------------ */
+  --paper:      #f4f2ec; /* page */
+  --paper-2:    #ebe8df; /* recessed wells, map ground */
+  --card:       #ffffff; /* raised surfaces */
+  --card-2:     #faf9f5; /* nested surfaces */
+
+  /* ---- ink --------------------------------------------------------------- */
+  --ink:        #17211c; /* headings, primary text */
+  --ink-2:      #46534b; /* body */
+  --ink-3:      #78837b; /* secondary, captions */
+  --ink-4:      #a6afa7; /* faint, disabled */
+
+  /* ---- structure --------------------------------------------------------- */
+  --line:       #d8dbd2;
+  --line-2:     #c3c8bc;
+  --line-soft:  #e7e9e2;
+
+  /* ---- brand: deep green ------------------------------------------------- */
+  --green:      #0f5c43;
+  --green-2:    #17795a;
+  --green-3:    #3d9c78;
+  --green-wash: #e4eee9;
+  --green-line: #bcd6c9;
+  --on-green:   #ffffff; /* text/icons placed on --green */
+
+  /* ---- alarm: clay red --------------------------------------------------- */
+  --clay:       #b03e2e;
+  --clay-2:     #cf5a44;
+  --clay-wash:  #f7e6e1;
+  --on-clay:    #ffffff; /* text/icons placed on --clay */
+  --clay-line:  #e8c4ba;
+
+  /* ---- signal ------------------------------------------------------------ */
+  --amber:      #b5761a;
+  --amber-wash: #f8eeda;
+  --blue:       #2f6b8f; /* water only */
+  --blue-2:     #4d93b8;
+  --blue-3:     #89c0d6;
+  --blue-wash:  #e3eff4;
+
+  /* ---- type -------------------------------------------------------------- */
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+
+  --t-xs:   11px;
+  --t-sm:   12.5px;
+  --t-base: 14px;
+  --t-md:   16px;
+  --t-lg:   20px;
+  --t-xl:   26px;
+  --t-2xl:  clamp(32px, 4vw, 44px);
+  --t-3xl:  clamp(40px, 6vw, 64px);
+
+  /* ---- space / form ------------------------------------------------------ */
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
+  --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+
+  --r-sm: 6px;
+  --r:    10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+
+  --shadow-1: 0 1px 2px rgba(23, 33, 28, .05), 0 1px 1px rgba(23, 33, 28, .03);
+  --shadow-2: 0 2px 4px rgba(23, 33, 28, .05), 0 8px 20px rgba(23, 33, 28, .06);
+  --shadow-3: 0 4px 8px rgba(23, 33, 28, .06), 0 18px 40px rgba(23, 33, 28, .10);
+
+  --ring: 0 0 0 3px rgba(23, 121, 90, .22);
+
+  /* ---- chart palette (read by charts.js / app.js) ------------------------- */
+  --c-people: #17795a;
+  --c-cattle: #b5761a;
+  --c-food:   #2f6b8f;
+  --c-alarm:  #b03e2e;
+  --c-grid:   rgba(23, 33, 28, .10);
+  --c-band:   rgba(23, 33, 28, .035);
+  --c-thresh: #b03e2e;
+}

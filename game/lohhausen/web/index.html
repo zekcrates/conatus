@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lohhausen</title>
+<link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+
+<!-- ══════════════════════════ START SCREEN ═══════════════════════════════ -->
+<div id="start" class="screen">
+  <div class="start-card">
+    <div class="crest">LH</div>
+    <h1>Lohhausen<span class="year">1981</span></h1>
+    <p class="lede">You are the mayor of Lohhausen, a town of 3,700 people. The watch factory belongs to
+      the town and pays most of the wages. You are in charge for ten years. Nobody can vote you out.</p>
+    <p class="lede small">You get <strong>eight planning sessions</strong>. Each one covers the next fifteen months.
+      The town does not wait. Money is in <strong>DM</strong> — Deutsche Mark.</p>
+    <div class="start-actions">
+      <button id="btn-start" class="primary">Take office</button>
+      <button id="btn-continue" class="ghost" hidden>Continue saved term</button>
+    </div>
+    <div class="start-footer">
+      <span class="seed-label">One town, ready when you are.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ GAME ═══════════════════════════════════════ -->
+<div id="game" class="screen" hidden>
+
+  <header class="topbar">
+    <div class="brand"><span class="crest sm">LH</span>
+      <div><div class="brand-name">Lohhausen</div><div class="brand-sub" id="date">January 1981 · Session 1 of 8</div></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="topbar-actions">
+      <button id="btn-how" class="ghost small" title="How to play">How to play</button>
+      <button id="btn-measures" class="primary">Plan the next 15 months</button>
+      <button id="btn-menu" class="ghost icon" title="Save / export / restart">⋯</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="col left-col">
+    <!-- what to look at, then the town -->
+    <section class="panel notes-panel">
+      <h2>What to look at <span class="hint">notes from the town clerk</span></h2>
+      <div id="notes"></div>
+      <div class="goal">Five things to watch, in the strip at the top: <strong>money</strong>, <strong>work</strong>,
+        <strong>the factory</strong>, <strong>how people feel</strong>, <strong>homes</strong>. You decide what counts as good.</div>
+    </section>
+
+    <!-- left: the town -->
+    <section class="panel town-panel">
+      <h2>Town</h2>
+      <div class="town-map" id="town-map">
+        <svg viewBox="0 0 800 430" preserveAspectRatio="xMidYMid meet" aria-label="Lohhausen">
+          <!-- hills -->
+          <path class="hill far" d="M0 96 C 120 52 230 88 340 62 C 460 34 560 74 680 46 C 730 34 770 46 800 40 L800 120 L0 120 Z"/>
+          <path class="hill" d="M0 128 C 100 92 200 116 300 100 C 420 80 520 112 640 92 C 710 80 760 96 800 86 L800 190 L0 190 Z"/>
+          <rect class="ground" x="0" y="186" width="800" height="244"/>
+          <!-- railway -->
+          <line class="rail" x1="0" y1="410" x2="800" y2="392"/>
+          <line class="rail tie" x1="0" y1="416" x2="800" y2="398"/>
+          <!-- the main street -->
+          <path class="street" d="M20 336 C 160 308 280 316 420 306 C 560 296 680 288 790 276"/>
+          <path class="street thin" d="M120 430 C 150 380 170 350 200 332"/>
+          <path class="street thin" d="M560 424 C 570 380 585 340 600 310"/>
+          <!-- the works, left -->
+          <g id="works" class="works" transform="translate(46 186)">
+            <rect class="works-body" x="0" y="70" width="252" height="104" rx="3"/>
+            <path class="sawtooth" d="M6 70 L38 46 L70 70 L102 46 L134 70 L166 46 L198 70 L230 46 L246 70 Z"/>
+            <rect class="works-hall" x="18" y="104" width="96" height="66"/>
+            <rect class="works-hall" x="134" y="104" width="96" height="66"/>
+            <rect class="chimney" x="30" y="4" width="18" height="52"/>
+            <rect class="chimney" x="76" y="-10" width="18" height="66"/>
+            <g id="smoke" class="smoke"><circle cx="39" cy="-4" r="13"/><circle cx="56" cy="-22" r="17"/><circle cx="85" cy="-30" r="14"/><circle cx="102" cy="-48" r="18"/></g>
+            <text class="label" x="70" y="198">Watch factory</text>
+          </g>
+          <!-- town hall & church -->
+          <g id="rathaus" transform="translate(320 118)">
+            <rect x="0" y="34" width="126" height="62" rx="3"/>
+            <path d="M-8 34 L63 -4 L134 34 Z"/>
+            <rect x="52" y="4" width="22" height="34" rx="2"/>
+            <path d="M48 4 L63 -14 L78 4 Z"/>
+            <rect class="clock" x="57" y="52" width="14" height="14" rx="7"/>
+            <text class="label" x="60" y="116">Town hall</text>
+          </g>
+          <g id="church" transform="translate(474 126)">
+            <rect x="0" y="40" width="44" height="56" rx="3"/>
+            <path d="M-4 40 L22 16 L48 40 Z"/>
+            <rect x="18" y="-12" width="8" height="28"/>
+            <path class="spire" d="M16 -12 L22 -26 L28 -12 Z"/>
+            <text class="label" x="2" y="114">Church</text>
+          </g>
+          <!-- residential rows (filled by the UI) -->
+          <g id="houses" class="houses"></g>
+          <g id="cranes"></g>
+          <!-- park -->
+          <g id="fac-parks" class="facility">
+            <path class="park-lawn" d="M556 258 C 600 246 660 250 700 262 C 700 292 660 306 604 302 C 570 300 552 284 556 258 Z"/>
+            <g transform="translate(584 268)"><circle class="tree" r="11"/><rect class="trunk" x="-2" y="9" width="4" height="12"/></g>
+            <g transform="translate(618 280)"><circle class="tree" r="13"/><rect class="trunk" x="-2" y="11" width="4" height="14"/></g>
+            <g transform="translate(656 266)"><circle class="tree" r="10"/><rect class="trunk" x="-2" y="8" width="4" height="11"/></g>
+            <g transform="translate(682 284)"><circle class="tree" r="9"/><rect class="trunk" x="-2" y="7" width="4" height="10"/></g>
+            <text class="label" x="616" y="316">Park</text>
+          </g>
+          <!-- facilities along the bottom -->
+          <g id="fac-kindergarten" class="facility" transform="translate(40 296)">
+            <rect x="0" y="18" width="86" height="38" rx="3"/><path d="M-5 18 L43 -6 L91 18 Z"/>
+            <text class="label" x="26" y="78">Nursery</text>
+          </g>
+          <g id="fac-sports" class="facility" transform="translate(150 300)">
+            <path d="M0 44 A42 36 0 0 1 84 44 Z"/><rect x="-7" y="44" width="98" height="8" rx="3"/>
+            <text class="label" x="6" y="78">Pool</text>
+          </g>
+          <g id="fac-library" class="facility" transform="translate(264 302)">
+            <rect x="0" y="16" width="80" height="38" rx="3"/><rect class="roof" x="-5" y="7" width="90" height="10" rx="2"/>
+            <text class="label" x="14" y="78">Library</text>
+          </g>
+          <g id="fac-school" class="facility" transform="translate(366 300)">
+            <rect x="0" y="18" width="118" height="40" rx="3"/><rect class="roof" x="-5" y="9" width="128" height="10" rx="2"/>
+            <text class="label" x="36" y="80">School</text>
+          </g>
+          <g id="fac-elderly" class="facility" transform="translate(506 300)">
+            <rect x="0" y="18" width="96" height="40" rx="3"/><path class="roof" d="M-5 18 L48 -8 L101 18 Z"/>
+            <text class="label" x="38" y="80">Care home</text>
+          </g>
+          <g id="fac-hotel" class="facility" transform="translate(628 296)">
+            <rect x="0" y="0" width="92" height="58" rx="3"/><rect class="roof" x="-5" y="-10" width="102" height="12" rx="2"/>
+            <text class="label" x="30" y="80">Hotel</text>
+          </g>
+          <!-- street lights -->
+          <g id="lights" class="lights"></g>
+        </svg>
+      </div>
+      <div class="town-readout" id="town-readout"></div>
+    </section>
+    </div>
+
+    <!-- centre: charts + briefing -->
+    <section class="panel charts-panel">
+      <div id="recap" hidden></div>
+      <h2>What is happening</h2>
+      <div class="tabs" id="chart-tabs"></div>
+      <div class="chart-wrap"><svg id="chart" viewBox="0 0 720 260" preserveAspectRatio="none"></svg>
+        <div class="chart-legend" id="chart-legend"></div>
+      </div>
+      <h2 class="mt">From the town clerk</h2>
+      <div class="briefing" id="briefing"></div>
+    </section>
+
+    <!-- right: inbox -->
+    <section class="panel inbox-panel">
+      <h2>Your post</h2>
+      <div class="filters" id="inbox-filters"></div>
+      <div class="feed" id="inbox"></div>
+    </section>
+  </main>
+
+  <footer class="dock">
+    <div class="dock-info" id="dock-info"></div>
+    <div class="dock-actions">
+      <button id="btn-cancel-orders" class="ghost" hidden>Discard orders</button>
+      <button id="btn-run" class="primary" hidden>Finish and run 15 months ▸</button>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════ HOW TO PLAY ═══════════════════════════════ -->
+<div id="modal-how" class="modal" hidden>
+  <div class="modal-card narrow how">
+    <header class="modal-head">
+      <div><h2>How to play</h2><p class="sub">Eight sessions. Ten years. One lesson.</p></div>
+      <button class="ghost icon" data-close-how>✕</button>
+    </header>
+    <ol class="how-steps">
+      <li><strong>Read the notes on the left.</strong> They say what is going wrong and where to fix it. Click one to go there.</li>
+      <li><strong>Open the planning session</strong> (top right). Every measure says what it costs, how long it takes and what it does. Order what you think the town needs, then <em>Give the orders</em>.</li>
+      <li><strong>Fifteen months pass.</strong> Post arrives as it goes. You can skip to the end.</li>
+      <li><strong>Read the recap</strong> in the middle: what changed, and which of your orders it followed. Then plan again. Eight sessions and ten years are gone.</li>
+    </ol>
+    <div class="how-note">
+      <p><strong>Three things nobody will tell you.</strong> How worn the machines are (have them checked), how people
+      really feel (only a poll, with error in it), and what happens next (the dashed line is a guess, not a promise).</p>
+      <p class="muted small">Money is in DM — Deutsche Mark.</p>
+    </div>
+    <footer class="modal-foot">
+      <div class="muted small">Reopen it any time from the top bar.</div>
+      <div class="modal-foot-actions"><button class="primary" data-close-how>Start governing</button></div>
+    </footer>
+  </div>
+</div>
+
+<!-- ══════════════════════════ MODALS ═════════════════════════════════════ -->
+<div id="modal-measures" class="modal" hidden>
+  <div class="modal-card wide">
+    <header class="modal-head">
+      <div><h2>Planning session</h2><p class="sub" id="measures-sub"></p></div>
+      <button class="ghost icon" data-close>✕</button>
+    </header>
+    <div class="measures-body">
+      <nav class="measure-groups" id="measure-groups"></nav>
+      <div class="measure-list" id="measure-list"></div>
+    </div>
+    <footer class="modal-foot">
+      <div class="cart" id="cart"></div>
+      <div class="modal-foot-actions">
+        <button class="ghost" data-close>Back to the desk</button>
+        <button id="btn-file-orders" class="primary">Give the orders, run 15 months ▸</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<div id="modal-run" class="modal run" hidden>
+  <div class="run-card">
+    <div class="run-head"><div id="run-title">Fifteen months pass</div><div class="run-clock" id="run-clock">February 1981</div></div>
+    <div class="run-feed" id="run-feed"></div>
+    <div class="run-foot"><button id="btn-run-skip" class="ghost small">Skip to the end ▸▸</button></div>
+  </div>
+</div>
+
+<div id="modal-report" class="modal" hidden>
+  <div class="modal-card wide">
+    <header class="modal-head"><div><h2>Ten years later</h2><p class="sub" id="report-sub"></p></div>
+      <button class="ghost icon" data-close-report>✕</button></header>
+    <div class="report-body" id="report-body"></div>
+    <footer class="modal-foot">
+      <div class="muted small">Every figure comes from your own ten years.</div>
+      <div class="modal-foot-actions">
+        <button id="btn-again" class="primary">New term</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<div id="modal-menu" class="modal" hidden>
+  <div class="modal-card narrow">
+    <header class="modal-head"><div><h2>Desk drawer</h2></div><button class="ghost icon" data-close-menu>✕</button></header>
+    <div class="menu-body">
+      <button id="btn-restart" class="danger ghost">Resign and start a new term</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/engine.bundle.js?v=9"></script>
+<script src="js/charts.js?v=9"></script>
+<script src="js/ui.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
+</body>
+</html>

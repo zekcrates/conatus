@@ -13,13 +13,33 @@
     },
     {
       "id": "estonia-1992",
-      "title": "Estonia 1992",
+      "title": "Estonia: A Little Country that Could",
       "version": "0.1.0",
       "status": "in-development",
       "priceCents": null,
       "currency": "USD",
-      "sourceDirectory": null,
+      "sourceDirectory": "estonia-1992",
       "access": "purchase"
+    },
+    {
+      "id": "lohhausen",
+      "title": "Lohhausen 1981",
+      "version": "1.0.0",
+      "status": "released",
+      "priceCents": null,
+      "currency": "USD",
+      "sourceDirectory": "lohhausen",
+      "access": "free"
+    },
+    {
+      "id": "tanaland",
+      "title": "Tanaland",
+      "version": "1.0.0",
+      "status": "released",
+      "priceCents": null,
+      "currency": "USD",
+      "sourceDirectory": "tanaland",
+      "access": "free"
     }
   ]
 }

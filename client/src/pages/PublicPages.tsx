@@ -13,6 +13,12 @@ import redArmyGameplay from "../assets/gameplay/eastern-front-red-army.png";
 import commandGameplay from "../assets/gameplay/eastern-front-command.png";
 import frontlineGameplay from "../assets/gameplay/eastern-front-frontline.png";
 import deploymentCloseGameplay from "../assets/gameplay/eastern-front-deployment-close.png";
+import lohhausenTownPlan from "../assets/gameplay/lohhausen-town-plan.png";
+import lohhausenPlanningSession from "../assets/gameplay/lohhausen-planning-session.png";
+import lohhausenSessionRecap from "../assets/gameplay/lohhausen-session-recap.png";
+import tanalandProgramme from "../assets/gameplay/tanaland-programme.png";
+import tanalandReport from "../assets/gameplay/tanaland-report.png";
+import tanalandVerdict from "../assets/gameplay/tanaland-verdict.png";
 
 const equipment = [
   ["Panzer III / IV", "Armoured breakthrough", panzerIvIcon],
@@ -32,7 +38,11 @@ const gameScreens = [
   deploymentCloseGameplay,
 ] as const;
 
-function GameScreenshots() {
+const lohhausenScreens = [lohhausenTownPlan, lohhausenPlanningSession, lohhausenSessionRecap] as const;
+
+const tanalandScreens = [tanalandProgramme, tanalandReport, tanalandVerdict] as const;
+
+function GameScreenshots({ images, gameName, heading }: { images: readonly string[]; gameName: string; heading: string }) {
   const railRef = useRef<HTMLDivElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -52,7 +62,7 @@ function GameScreenshots() {
   function move(direction: number) {
     railRef.current?.scrollBy({ left: direction * Math.max(280, railRef.current.clientWidth * 0.72), behavior: "smooth" });
   }
-  return <div className="game-screenshots"><div className="section-rule" /><div className="section-heading game-screenshots-heading"><h2>Inside the campaign</h2><div><button type="button" onClick={() => move(-1)} aria-label="Show previous game images">←</button><button type="button" onClick={() => move(1)} aria-label="Show next game images">→</button></div></div><div className="game-screenshots-rail" ref={railRef}>{gameScreens.map((image, index) => <figure key={image}><button type="button" className="game-screenshot-trigger" onClick={() => setSelectedImage(image)} aria-label={`Open Eastern Front gameplay screenshot ${index + 1}`}><img src={image} alt={`Eastern Front gameplay screenshot ${index + 1}`} loading="lazy" /></button></figure>)}</div>{selectedImage && <div className="screenshot-lightbox" role="dialog" aria-modal="true" aria-label="Gameplay screenshot" onClick={() => setSelectedImage(null)}><div className="screenshot-lightbox-frame" onClick={(event) => event.stopPropagation()}><button type="button" className="screenshot-lightbox-close" onClick={() => setSelectedImage(null)} aria-label="Close screenshot">×</button><img src={selectedImage} alt="Eastern Front gameplay screenshot" /></div></div>}</div>;
+  return <div className="game-screenshots"><div className="section-rule" /><div className="section-heading game-screenshots-heading"><h2>{heading}</h2><div><button type="button" onClick={() => move(-1)} aria-label="Show previous game images">←</button><button type="button" onClick={() => move(1)} aria-label="Show next game images">→</button></div></div><div className="game-screenshots-rail" ref={railRef}>{images.map((image, index) => <figure key={image}><button type="button" className="game-screenshot-trigger" onClick={() => setSelectedImage(image)} aria-label={`Open ${gameName} screenshot ${index + 1}`}><img src={image} alt={`${gameName} screenshot ${index + 1}`} loading="lazy" /></button></figure>)}</div>{selectedImage && <div className="screenshot-lightbox" role="dialog" aria-modal="true" aria-label="Game screenshot" onClick={() => setSelectedImage(null)}><div className="screenshot-lightbox-frame" onClick={(event) => event.stopPropagation()}><button type="button" className="screenshot-lightbox-close" onClick={() => setSelectedImage(null)} aria-label="Close screenshot">×</button><img src={selectedImage} alt={`${gameName} screenshot`} /></div></div>}</div>;
 }
 
 export function EasternFrontPage() {
@@ -64,9 +74,49 @@ export function EasternFrontPage() {
       </section>
       <section className="product-section campaign-section"><div><p className="eyebrow">The campaign</p><h2>The Eastern Front, 1941—43.</h2></div><div className="overview-copy"><p>The game begins with Operation Barbarossa. The Wehrmacht starts in Germany and advances through a network of cities toward Moscow, the Volga, and Stalingrad.</p><p>The Soviet side begins with the Red Army across the map. Its campaign is about absorbing the first attack, holding key cities, and reaching the point where the advance can be stopped.</p></div></section>
       <section className="product-section command-section"><div className="section-heading product-section-heading"><h2>Choose your command</h2><p>Two sides. Two campaigns.</p></div><div className="command-grid"><article><p className="eyebrow">The Wehrmacht</p><h3>Drive deep.</h3><p>Start the invasion, move east from Germany, and try to reach the Volga and Moscow before the campaign slows down.</p></article><article><p className="eyebrow">The USSR</p><h3>Trade space for time.</h3><p>Begin under attack, hold the important cities, and keep the Red Army alive until the German advance can be turned back.</p></article></div></section>
-      <GameScreenshots />
+      <GameScreenshots images={gameScreens} gameName="Eastern Front" heading="Inside the campaign" />
       <section className="product-section units-section"><div className="section-heading product-section-heading"><h2>On the map</h2><p>Historical equipment</p></div><div className="units-list">{equipment.map(([name, role, image]) => <div key={name}><img src={image} alt="" /><span>{name}</span><small>{role}</small></div>)}</div></section>
-      <section className="product-section purchase-section" id="purchase"><div><p className="eyebrow">Browser edition</p><h2>Play Eastern Front.</h2><p className="purchase-note">The game runs directly in your browser. No installation or account is required.</p></div><div className="purchase-actions"><div className="purchase-card"><a className="purchase-launch" href="/play/eastern-front/index.html">Play Eastern Front</a></div><a className="coffee-link" href={coffeeUrl} target="_blank" rel="noreferrer"><span className="coffee-icon" aria-hidden="true">☕</span><span>Buy us a coffee</span></a></div></section>
+      <section className="product-section purchase-section" id="purchase"><div><p className="eyebrow">Browser edition</p><h2>Play Eastern Front.</h2><p className="purchase-note">The game runs directly in your browser. No installation or account is required.</p></div><div className="purchase-actions"><div className="purchase-card"><a className="purchase-launch" href="/play/eastern-front/index.html" target="_blank" rel="noopener noreferrer">Play Eastern Front</a></div><a className="coffee-link" href={coffeeUrl} target="_blank" rel="noreferrer"><span className="coffee-icon" aria-hidden="true">☕</span><span>Buy us a coffee</span></a></div></section>
+    </main><Footer /></div>
+  );
+}
+
+export function EstoniaPage() {
+  return (
+    <div className="site-shell"><Header /><main className="product-page">
+      <section className="product-layout product-hero">
+        <div className="game-poster poster-next product-poster"><span className="poster-number">02</span><span className="poster-title">Estonia<br />1992</span><span className="poster-meta">Estonia · 1992—94</span></div>
+        <div className="product-info"><p className="eyebrow">Historical strategy game · In development</p><h1>Estonia: A Little Country that Could</h1><p className="product-lead">As Mart Laar, lead Estonia through the reforms that shaped its future.</p><p className="product-description">A browser game set in Estonia after 1991. Balance speed, stability, and public trust as you guide the country through monetary reform, banking discipline, privatisation, and the political cost of change.</p><div className="product-facts"><div><span>Setting</span><strong>Estonia</strong></div><div><span>Period</span><strong>1992—1994</strong></div><div><span>Format</span><strong>Browser game</strong></div></div></div>
+      </section>
+      <section className="product-section campaign-section"><div><p className="eyebrow">The campaign</p><h2>Estonia after 1991.</h2></div><div className="overview-copy"><p>The game begins in the first years of restored independence. The Soviet inheritance, an empty treasury, and a worthless rouble give way to the kroon, a balanced budget, and the painful work of building institutions.</p><p>Each month opens with the minister’s morning: a briefing, the numbers, the letters, and one decision. Reforms can cause short-term pain before producing long-term improvement.</p></div></section>
+      <section className="product-section purchase-section" id="purchase"><div><p className="eyebrow">Browser edition</p><h2>Play Estonia 1992.</h2><p className="purchase-note">The game runs directly in your browser. No installation or account is required. This build is still in development.</p></div><div className="purchase-actions"><div className="purchase-card"><a className="purchase-launch" href="/play/estonia-1992/index.html" target="_blank" rel="noopener noreferrer">Play Estonia 1992</a></div><a className="coffee-link" href={coffeeUrl} target="_blank" rel="noreferrer"><span className="coffee-icon" aria-hidden="true">☕</span><span>Buy us a coffee</span></a></div></section>
+    </main><Footer /></div>
+  );
+}
+
+export function LohhausenPage() {
+  return (
+    <div className="site-shell"><Header /><main className="product-page">
+      <section className="product-layout product-hero">
+        <div className="game-poster poster-lohhausen product-poster"><span className="poster-number">03</span><span className="poster-title">Lohhausen<br />1981</span><span className="poster-meta">Lohhausen · 1981—91</span></div>
+        <div className="product-info"><p className="eyebrow">Simulation game · Play now</p><h1>Lohhausen<br />1981</h1><p className="product-lead">You are the mayor of a town of 3,700 people whose watch factory pays most of the wages. You hold office for ten years, and nobody can vote you out.</p><p className="product-description">Eight planning sessions, each covering the next fifteen months. Order housing, roads, schooling and repairs, set the taxes and the wages, and then watch what the town does with your decisions.</p><div className="product-facts"><div><span>Setting</span><strong>Lohhausen</strong></div><div><span>Period</span><strong>1981—1991</strong></div><div><span>Format</span><strong>Browser game</strong></div></div></div>
+      </section>
+      <section className="product-section campaign-section"><div><p className="eyebrow">The campaign</p><h2>Ten years, eight sessions.</h2></div><div className="overview-copy"><p>Lohhausen is a reconstruction of the town microworld of Dörner, Kreuzig, Reither and Stäudel (1983) — the town called Greenvale in the English edition of <em>The Logic of Failure</em>.</p></div></section>
+      <GameScreenshots images={lohhausenScreens} gameName="Lohhausen" heading="Inside the term" />
+      <section className="product-section purchase-section" id="purchase"><div><p className="eyebrow">Browser edition</p><h2>Play Lohhausen 1981.</h2><p className="purchase-note">The game runs directly in your browser. No installation or account is required.</p></div><div className="purchase-actions"><div className="purchase-card"><a className="purchase-launch" href="/play/lohhausen/index.html" target="_blank" rel="noopener noreferrer">Play Lohhausen</a></div><a className="coffee-link" href={coffeeUrl} target="_blank" rel="noreferrer"><span className="coffee-icon" aria-hidden="true">☕</span><span>Buy us a coffee</span></a></div></section>
+    </main><Footer /></div>
+  );
+}
+
+export function TanalandPage() {
+  return (
+    <div className="site-shell"><Header /><main className="product-page">
+      <section className="product-layout product-hero">
+        <div className="game-poster poster-tanaland product-poster"><span className="poster-number">04</span><span className="poster-title">Tanaland</span><span className="poster-meta">Tanaland · Ten years</span></div>
+        <div className="product-info"><p className="eyebrow">Simulation game · Play now</p><h1>Tanaland</h1><p className="product-lead">Take charge of a developing country for ten years — the planning exercise from Dietrich Dörner’s <em>The Logic of Failure</em>.</p><p className="product-description">Six planning sessions of twenty months. Choose from nine measures — tsetse control, deep wells, irrigation, fertiliser, pest control, family planning, a health service, herd culling and mechanised farming — and commission surveys when you would rather look than guess.</p><div className="product-facts"><div><span>Setting</span><strong>Tanaland</strong></div><div><span>Period</span><strong>Ten years</strong></div><div><span>Format</span><strong>Browser game</strong></div></div></div>
+      </section>
+      <GameScreenshots images={tanalandScreens} gameName="Tanaland" heading="Inside the ten years" />
+      <section className="product-section purchase-section" id="purchase"><div><p className="eyebrow">Browser edition</p><h2>Play Tanaland.</h2><p className="purchase-note">The game runs directly in your browser. No installation or account is required.</p></div><div className="purchase-actions"><div className="purchase-card"><a className="purchase-launch" href="/play/tanaland/index.html" target="_blank" rel="noopener noreferrer">Play Tanaland</a></div><a className="coffee-link" href={coffeeUrl} target="_blank" rel="noreferrer"><span className="coffee-icon" aria-hidden="true">☕</span><span>Buy us a coffee</span></a></div></section>
     </main><Footer /></div>
   );
 }
@@ -84,7 +134,7 @@ export function GamesPage() {
 }
 
 export function AboutPage() {
-  return <PageShell eyebrow="About Conatus" title="About us" intro="Conatus is an independent studio making browser games about history and economics." showBack={false} showEyebrow={false}><div className="basic-copy"><p>We build games around real places, systems, and decisions. Each project starts with research and becomes something you can play directly in your browser.</p><p>Our games are made to be approachable, replayable, and grounded in the forces that shape people and societies.</p></div></PageShell>;
+  return <PageShell eyebrow="About Conatus" title="About us" intro="Conatus is an independent studio making simple, fun games." showBack={false} showEyebrow={false}><div className="basic-copy"><p>We build games around real places and real decisions. Each project starts with research and becomes something you can play right away.</p><p>Our games are easy to pick up, quick to play, and made to be replayed.</p></div></PageShell>;
 }
 
 export function ContactPage() {
@@ -108,5 +158,9 @@ export function NotFoundPage() {
 }
 
 export function HomePage() {
-  return <div className="site-shell"><Header showAuth /><main id="top"><section className="hero"><div className="hero-intro"><p className="eyebrow">Independent game studio</p><h1>We make games about history and economics.</h1></div></section><section className="featured-section"><div className="section-rule" /><div className="section-heading featured-heading"><h2>Featured games</h2><p>Start here</p></div><a href="/games/eastern-front" className="featured-row"><div className="game-poster poster-stalingrad featured-poster"><span className="poster-number">01</span><span className="poster-title">Eastern<br />Front</span><span className="poster-meta">Eastern Front · 1941—43</span><span className="poster-mark">C</span></div><div className="featured-copy"><h2>Eastern Front</h2><p>Choose the Wehrmacht or the USSR, deploy your forces across the Eastern Front, and survive the campaign from Barbarossa to Stalingrad.</p><span className="featured-link">View game</span></div></a><a href="#" className="featured-row featured-row-reverse"><div className="game-poster poster-next featured-poster"><span className="poster-number">02</span><span className="poster-title">Estonia<br />1992</span><span className="poster-meta">Estonia · 1992—94</span></div><div className="featured-copy"><h2>Estonia 1992</h2><p>As Mart Laar, lead Estonia through the reforms that shaped its future as you balance speed, stability, and public trust.</p><span className="featured-link">In development</span></div></a></section><section id="games" className="games-section"><div className="section-rule" /><div className="section-heading"><h2>The games</h2><p>Scroll to explore →</p></div><div className="games-grid">{games.map((game) => <a href={game.href} className="game-entry" key={game.id}><div className={`game-poster ${game.poster}`}><span className="poster-number">{game.id}</span><span className="poster-title">{game.title}</span><span className="poster-meta">{game.meta}</span>{game.poster === "poster-stalingrad" && <span className="poster-mark">C</span>}</div><div className="game-entry-info"><div><h3>{game.title}</h3><p>{game.description}</p></div><span className="game-status">{game.price === "—" ? game.status : `${game.price} · ${game.status}`}</span></div></a>)}</div></section></main><Footer /></div>;
+  const railRef = useRef<HTMLDivElement>(null);
+  function moveRail(direction: number) {
+    railRef.current?.scrollBy({ left: direction * Math.max(320, railRef.current.clientWidth * 0.8), behavior: "smooth" });
+  }
+  return <div className="site-shell"><Header showAuth /><main id="top"><section className="hero"><div className="hero-intro"><p className="eyebrow">Independent game studio</p><h1>We make simple, fun games.</h1></div></section><section className="featured-section"><div className="section-rule" /><div className="section-heading featured-heading"><h2>Featured games</h2><p>Start here</p></div><a href="/games/eastern-front" className="featured-row"><div className="game-poster poster-stalingrad featured-poster"><span className="poster-number">01</span><span className="poster-title">Eastern<br />Front</span><span className="poster-meta">Eastern Front · 1941—43</span><span className="poster-mark">C</span></div><div className="featured-copy"><h2>Eastern Front</h2><p>Choose the Wehrmacht or the USSR, deploy your forces across the Eastern Front, and survive the campaign from Barbarossa to Stalingrad.</p><span className="featured-link">View game</span></div></a><a href="/games/estonia-1992" className="featured-row featured-row-reverse"><div className="game-poster poster-next featured-poster"><span className="poster-number">02</span><span className="poster-title">Estonia<br />1992</span><span className="poster-meta">Estonia · 1992—94</span></div><div className="featured-copy"><h2>Estonia: A Little Country that Could</h2><p>As Mart Laar, lead Estonia through the reforms that shaped its future as you balance speed, stability, and public trust.</p><span className="featured-link">In development</span></div></a></section><section id="games" className="games-section"><div className="section-rule" /><div className="section-heading"><h2>The games</h2><div className="rail-nav"><button type="button" onClick={() => moveRail(-1)} aria-label="Show previous games">←</button><button type="button" onClick={() => moveRail(1)} aria-label="Show next games">→</button></div></div><div className="games-grid" ref={railRef}>{games.map((game) => <a href={game.href} className="game-entry" key={game.id}><div className={`game-poster ${game.poster}`}><span className="poster-number">{game.id}</span><span className="poster-title">{game.title}</span><span className="poster-meta">{game.meta}</span>{game.poster === "poster-stalingrad" && <span className="poster-mark">C</span>}</div><div className="game-entry-info"><div><h3>{game.title}</h3><p>{game.description}</p></div><span className="game-status">{game.price === "—" ? game.status : `${game.price} · ${game.status}`}</span></div></a>)}</div></section></main><Footer /></div>;
 }

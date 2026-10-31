@@ -1,6 +1,9 @@
 import { Component, lazy, Suspense, type ErrorInfo, type ReactNode } from "react";
 
 const EasternFrontPage = lazy(() => import("./pages/PublicPages").then((module) => ({ default: module.EasternFrontPage })));
+const EstoniaPage = lazy(() => import("./pages/PublicPages").then((module) => ({ default: module.EstoniaPage })));
+const LohhausenPage = lazy(() => import("./pages/PublicPages").then((module) => ({ default: module.LohhausenPage })));
+const TanalandPage = lazy(() => import("./pages/PublicPages").then((module) => ({ default: module.TanalandPage })));
 const StorePage = lazy(() => import("./pages/PublicPages").then((module) => ({ default: module.StorePage })));
 const GamesPage = lazy(() => import("./pages/PublicPages").then((module) => ({ default: module.GamesPage })));
 const AboutPage = lazy(() => import("./pages/PublicPages").then((module) => ({ default: module.AboutPage })));
@@ -22,6 +25,9 @@ function RouteView() {
   if (pathname === "/privacy") return <PrivacyPage />;
   if (pathname === "/terms") return <TermsPage />;
   if (pathname === "/games/eastern-front" || pathname === "/games/operation-stalingrad") return <EasternFrontPage />;
+  if (pathname === "/games/estonia-1992" || pathname === "/games/estonia") return <EstoniaPage />;
+  if (pathname === "/games/lohhausen") return <LohhausenPage />;
+  if (pathname === "/games/tanaland") return <TanalandPage />;
   if (pathname === "/") return <HomePage />;
   return <NotFoundPage />;
 }
